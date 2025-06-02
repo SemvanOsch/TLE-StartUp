@@ -1,11 +1,23 @@
 import { useState } from 'react'
+import {createBrowserRouter, RouterProvider} from "react-router";
+
+
+const router = createBrowserRouter([
+    {
+        children: [
+            {
+                path: '/',
+                element: <Home/>,
+            },
+        ]
+    }
+]);
 
 function App() {
-
   return (
-    <>
-      <h1 className="text-3xl font-bold underline">Hallo!</h1>
-    </>
+      <>
+          <RouterProvider router={router}/>
+      </>
   )
 }
 
