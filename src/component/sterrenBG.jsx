@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 const genereerSter = () => {
     const size = Math.random() * 2 + 1;
     return {
-        id: crypto.randomUUID() ,
+        id: crypto.randomUUID(),
         x: Math.random() * 100,
         y: Math.random() * 100,
         size,
