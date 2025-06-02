@@ -1,11 +1,9 @@
-import SterrenBG from "../component/sterrenBG.jsx";
-
-function HomePage(){
+const HomePage = () => {
     return(
-        <>
-            <SterrenBG />
-            <h1>Homepage!!!!!!!!!!!!!!!!</h1>
-        </>
+        <div>
+        <h1>home</h1>
+        </div>
     );
 }
-export default HomePage
+
+export default HomePage;
