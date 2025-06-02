@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import {createBrowserRouter, RouterProvider} from "react-router";
-
+import HomePage from "./pages/homePage.jsx";
 
 const router = createBrowserRouter([
     {
         children: [
             {
                 path: '/',
-                element: <Home/>,
+                element: <HomePage/>,
             },
         ]
     }
