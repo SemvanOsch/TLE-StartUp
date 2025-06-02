@@ -6,9 +6,13 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "#0F002A",
-      },
+        fontFamily: {
+            ArialRounded: ['Arial Rounded MT Bold'],
+        },
+        colors: {
+            'background' : '#0F002A',
+            'text' : '#E6E6E6',
+        },
       animation: {
         moveStars: "moveStars 100s linear infinite",
       },
