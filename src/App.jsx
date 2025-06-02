@@ -1,14 +1,19 @@
 import { useState } from 'react'
 import {createBrowserRouter, RouterProvider} from "react-router";
+import Multiplication from "./pages/multiplication.jsx";
 import UpgradePage from "/src/pages/UpgradePage.jsx"
-import Home from "/src/pages/HomePage.jsx"
+
 
 const router = createBrowserRouter([
     {
         children: [
+            // {
+            //     path: '/',
+            //     element: <Home/>,
+            // },
             {
-                path: '/',
-                element: <Home/>,
+                path: '/multiplication',
+                element: <Multiplication/>,
             },
             {
                 path: '/upgrade',
