@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import {createBrowserRouter, RouterProvider} from "react-router";
+import HomePage from "./pages/HomePage.jsx";
+import Multiplication from "./pages/multiplication.jsx";
+import UpgradePage from "./pages/UpgradePage.jsx";
 
 
 const router = createBrowserRouter([
