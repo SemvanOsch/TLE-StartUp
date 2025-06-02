@@ -5,7 +5,15 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        ArialRounded: ['Arial Rounded MT Bold'],
+      },
+      colors: {
+        'background' : '#0F002A',
+        'text' : '#E6E6E6',
+      },
+    },
   },
   plugins: [],
 }
