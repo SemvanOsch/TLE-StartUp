@@ -2,33 +2,45 @@ import React, { useState, useEffect } from 'react';
 import {useNavigate, useParams} from "react-router";
 
 function Multiplication() {
-    const [button1Value, setButton1Value] = useState("10");
-    const [button2Value, setButton2Value] = useState("20");
-    const [button3Value, setButton3Value] = useState("30");
-    const [button4Value, setButton4Value] = useState("40");
+    const [button1Value, setButton1Value] = useState("0");
+    const [button2Value, setButton2Value] = useState("0");
+    const [button3Value, setButton3Value] = useState("0");
+    const [button4Value, setButton4Value] = useState("0");
 
-    const [rightButton, setRightButton] = useState("1");
+    const [number1, setNumber1] = useState(3);
+    const [number2, setNumber2] = useState(3);
 
     useEffect(() => {
         const rightAnswerButton = Math.floor(Math.random() * 4);
-        setRightButton(rightAnswerButton);
         console.log("Right answer button:", rightAnswerButton);
 
-        setButton1Value(rightAnswerButton === 0 ? 20 : Math.floor(Math.random() * 100));
-        setButton2Value(rightAnswerButton === 1 ? 20 : Math.floor(Math.random() * 100));
-        setButton3Value(rightAnswerButton === 2 ? 20 : Math.floor(Math.random() * 100));
-        setButton4Value(rightAnswerButton === 3 ? 20 : Math.floor(Math.random() * 100));
+        setButton1Value(rightAnswerButton === 0 ? (number1 * number2) : Math.floor(Math.random() * 100));
+        setButton2Value(rightAnswerButton === 1 ? (number1 * number2) : Math.floor(Math.random() * 100));
+        setButton3Value(rightAnswerButton === 2 ? (number1 * number2) : Math.floor(Math.random() * 100));
+        setButton4Value(rightAnswerButton === 3 ? (number1 * number2) : Math.floor(Math.random() * 100));
     }, []);
 
-
     function handleButton(event){
-        event.preventDefault()
+        event.preventDefault();
+
         const id = event.currentTarget.getAttribute("id");
+        const value = parseInt(event.currentTarget.querySelector("p").textContent); // convert to number
+
         console.log(`Pressed button ${id}`);
+        console.log(`Button value: ${value}`);
+
+        if (value === (number1 * number2)) {
+            console.log("Clicked correct button!");
+        } else {
+            console.log("Clicked incorrect button!")
+        }
     }
 
     return(
         <main className="bg-background">
+            <div className="absolute flex flex-col justify-center pl-40 h-full">
+                <img src="/images/rocket.png" className="w-80 h-40" alt="Rocket"></img>
+            </div>
             <section className="flex justify-center">
                 <div className="w-[70%] pt-10">
                     <progress
@@ -58,27 +70,29 @@ function Multiplication() {
                 </div>
             </section>
             <section>
-                <form className="flex flex-col pt-10">
-                    <button id="1" onClick={handleButton}
-                            className="ml-[70%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                        <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button1Value}</p>
-                    </button>
-                    <button id="2" onClick={handleButton}
-                            className="ml-[50%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                        <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button2Value}</p>
-                    </button>
-                    <button id="3" onClick={handleButton}
-                            className="ml-[70%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                        <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button3Value}</p>
-                    </button>
-                    <button id="4" onClick={handleButton}
-                            className="ml-[50%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                        <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button4Value}</p>
-                    </button>
-                </form>
+                <div>
+                    <form className="flex flex-col pt-10">
+                        <button id="1" onClick={handleButton}
+                                className="ml-[70%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button1Value}</p>
+                        </button>
+                        <button id="2" onClick={handleButton}
+                                className="ml-[50%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button2Value}</p>
+                        </button>
+                        <button id="3" onClick={handleButton}
+                                className="ml-[70%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button3Value}</p>
+                        </button>
+                        <button id="4" onClick={handleButton}
+                                className="ml-[50%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button4Value}</p>
+                        </button>
+                    </form>
+                </div>
             </section>
             <section className="flex justify-center pt-10">
-                <h2 className="text-9xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">4*5</h2>
+                <h2 className="text-9xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{number1}*{number2}</h2>
             </section>
         </main>
     )
