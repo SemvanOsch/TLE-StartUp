@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import {createBrowserRouter, RouterProvider} from "react-router";
+import StudentOverview from "./pages/StudentOverview.jsx";
+import Student from "./pages/StudentDetails.jsx";
+import Multiplication from "./pages/multiplication.jsx";
+import UpgradePage from "./pages/UpgradePage.jsx";
 
 
 const router = createBrowserRouter([
