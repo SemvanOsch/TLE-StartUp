@@ -1,4 +1,4 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import upgradeButton20 from '/src/images/upgrade20.png'
 import upgradeButton20disabled from '/src/images/upgrade20disabled.png'
 import upgradeButton50 from '/src/images/upgrade50.png'
