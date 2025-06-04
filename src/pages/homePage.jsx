@@ -10,7 +10,7 @@ const HomePage = () => {
         setStartTransition(true);
         setTimeout(() => {
             navigate("/upgrade");
-        }, 1500); // wacht tot animatie voorbij is
+        }, 1500);
     };
 
     return (
