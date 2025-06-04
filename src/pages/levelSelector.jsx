@@ -97,7 +97,7 @@ const LevelSelector = () => {
     }, []);
 
     const handlePlanetClick = () => {
-        navigate("/home");
+        navigate("/multiplication");
     };
 
     return (
