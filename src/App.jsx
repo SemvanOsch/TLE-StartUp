@@ -1,28 +1,30 @@
-import { useState } from 'react'
-import {createBrowserRouter, RouterProvider} from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import Multiplication from "./pages/multiplication.jsx";
+import LevelSelector from "./pages/LevelSelector.jsx";
 
 const router = createBrowserRouter([
     {
         children: [
             // {
-            //     path: '/',
-            //     element: <Home/>,
+            //   path: '/',
+            //   element: <Home />,
             // },
             {
                 path: '/multiplication',
-                element: <Multiplication/>,
+                element: <Multiplication />,
+            },
+            {
+                path: '/levels',
+                element: <LevelSelector />,
             },
         ]
     }
 ]);
 
 function App() {
-  return (
-      <>
-          <RouterProvider router={router}/>
-      </>
-  )
+    return (
+        <RouterProvider router={router} />
+    );
 }
 
-export default App
+export default App;
