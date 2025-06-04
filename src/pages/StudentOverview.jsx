@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import SterrenBG from "../components/SterrenBG.jsx";
+import SterrenBG from "../component/SterrenBG.jsx";
 
 function StudentOverview(){
     const [users, setUsers] = useState([]);

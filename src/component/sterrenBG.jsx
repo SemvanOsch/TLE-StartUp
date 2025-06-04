@@ -12,7 +12,7 @@ const genereerSter = () => {
     };
 };
 
-const SterrenBG = ({ aantalSterren = 650 }) => {
+const SterrenBG = ({ aantalSterren = 100 }) => {
     const [sterren, setSterren] = useState([]);
     const sterrenRef = useRef([]);
 
