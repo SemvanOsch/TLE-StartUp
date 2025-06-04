@@ -12,7 +12,50 @@ import '/src/index.css'
 
 
 const UpgradePage = () => {
-    const [money, setMoney] = useState(15)
+
+    useEffect(() => {
+        async function fetchUser(){
+            const token = localStorage.getItem('token')
+            const response = await fetch('http://localhost:3001/api/game/me',{
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if(response.ok){
+                const user = await response.json()
+                setMoney(user.coins)
+                console.log('ingelogd', user)
+            }
+        }
+
+        fetchUser()
+    }, []);
+
+    async function addMoney(){
+        const token = localStorage.getItem('token')
+        const response = await fetch('http://localhost:3001/api/game/me/coins',{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({ amount: 5 })
+        })
+
+        if(response.ok){
+            const data = await response.json()
+            setMoney(data.coins)
+        }else{
+            console.log('error adding coins')
+        }
+    }
+
+
+
+    const [money, setMoney] = useState()
     const [currentButton, setCurrentButton] = useState()
     const [upgradedStage, setUpgradedStage] = useState(1)
     const [background, setBackground] = useState(background1)
@@ -39,9 +82,7 @@ const UpgradePage = () => {
             setCurrentButton(upgradeButton0)
         }
     }
-    function addMoney(){
-        setMoney(money + 5)
-    }
+
     function useMoney(){
         if(upgradedStage == 1 && money >= 20) {
             setMoney(money - 20)

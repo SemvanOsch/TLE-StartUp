@@ -17,9 +17,8 @@ const LoginPage = () => {
                 const token = data.token
 
                 localStorage.setItem('token', token)
-                localStorage.setItem('user', JSON.stringify(data.user))
-
-                console.log('ingelogd', token)
+                console.log('inhoud van localstorage', localStorage)
+                console.log('ingelogd')
             }
     }
 
