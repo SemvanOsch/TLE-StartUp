@@ -44,7 +44,9 @@ const HomePage = () => {
                     {/* Lanceer knop */}
                     <div className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[320px]">
                         <div className="absolute top-1 left-1 bg-orange-500 skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
-                        <button className="relative bg-yellow-400 skew-x-[-12deg] rounded px-16 py-6 text-xl font-bold text-black z-10 w-full">
+                        <button className="relative bg-yellow-400 skew-x-[-12deg] rounded px-16 py-6 text-xl font-bold text-black z-10 w-full"
+                        onClick={() => navigate('levels')}
+                        >
                             <span className="skew-x-[12deg] text-3xl block">Lanceer!</span>
                         </button>
                     </div>
