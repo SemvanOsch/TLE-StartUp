@@ -171,7 +171,7 @@ function Multiplication() {
                                 <h2>3 muntjes</h2>
                             </div>
                         </div>
-                        <button onClick={handleQuitButton} className="mt-4 bg-green rounded-lg pb-4 pt-4 text-background shadow-custom-blue">
+                        <button onClick={handleQuitButton} className="mt-4 bg-RaketGreenBtn rounded-lg pb-4 pt-4 text-background shadow-custom-blue">
                             <p>Terug naar raket</p>
                         </button>
                     </div>
