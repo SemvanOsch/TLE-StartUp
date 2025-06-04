@@ -1,15 +1,6 @@
-import { useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import upgradeButton20 from '/src/images/upgrade20.png'
 import upgradeButton20disabled from '/src/images/upgrade20disabled.png'
-import upgradeButton50 from '/src/images/upgrade50.png'
-import upgradeButton50disabled from '/src/images/upgrade50disabled.png'
-import upgradeButton0 from '/src/images/upgrade0.png'
-import background1 from '/src/images/placeholderBackgroundImage1.png'
-import background2 from '/src/images/placeholderBackgroundImage2.png'
-import blackcat from '/src/images/blackcat.png'
-import spaceshipWindow from '/src/images/spaceshipWindow.png'
-import '/src/index.css'
-
 
 const UpgradePage = () => {
     const [money, setMoney] = useState(15)
@@ -57,8 +48,18 @@ const UpgradePage = () => {
         }
     }
 
-    useEffect(changeButton)
+    useEffect(() => {
+        // Fade away the white overlay shortly after mount
+        const timeout = setTimeout(() => {
+            setFadeOverlayVisible(false);
+        }, 100); // Slight delay for smoother feel
 
+        return () => clearTimeout(timeout);
+    }, []);
+
+    useEffect(() => {
+        setCurrentButton(money >= 14 ? upgradeButton20 : upgradeButton20disabled);
+    }, [money]);
 
     return(
         <div style={{backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh'}}>

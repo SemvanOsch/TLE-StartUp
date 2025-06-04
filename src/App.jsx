@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import {createBrowserRouter, RouterProvider} from "react-router";
+import HomePage from "./pages/HomePage.jsx";
 import StudentOverview from "./pages/StudentOverview.jsx";
 import Student from "./pages/StudentDetails.jsx";
 import Multiplication from "./pages/multiplication.jsx";
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
             {
                 path: '/student/:id',
                 element: <Student/>,
+            },
+            {
+                path: '/',
+                element: <HomePage/>,
             },
             {
                 path: '/multiplication',
