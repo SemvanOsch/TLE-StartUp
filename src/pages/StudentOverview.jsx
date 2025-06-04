@@ -5,7 +5,7 @@ function StudentOverview(){
     const [users, setUsers] = useState([]);
     async function fetchData() {
         try {
-            const response = await fetch('/test.json', {
+            const response = await fetch('http://localhost:3001/api/game/users', {
                 method: 'GET',
                 headers: {
                     'Accept': 'application/json'
@@ -31,7 +31,7 @@ function StudentOverview(){
                     {users.map((user, index) => (
                         <a
                             key={index}
-                            href={`/student/${user.id}`}
+                            href={`/student/${user._id}`}
                             className="text-black bg-gray-300 h-40 flex flex-col items-center justify-center rounded-md hover:bg-gray-400 transition no-underline"
                         >
                             <img
