@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import {useNavigate, useParams} from "react-router";
+import {useNavigate} from "react-router";
 
 function Multiplication() {
+    const navigate = useNavigate();
+
+    const [isEndPopup, setIsEndPopup] = useState(false);
+
     const [button1Value, setButton1Value] = useState("0");
     const [button2Value, setButton2Value] = useState("0");
     const [button3Value, setButton3Value] = useState("0");
@@ -9,18 +13,54 @@ function Multiplication() {
 
     const [number1, setNumber1] = useState(3);
     const [number2, setNumber2] = useState(3);
+    const [answer,setAnswer] = useState(number1 * number2);
+
+    const [question, setQuestion] = useState(0);
+    const questionCount = 10;
+    const [correctAmmount, setCorrectAmmount] = useState(0);
+
+    const [time, setTime] = useState(0);
+    const [isRunning, setIsRunning] = useState(false);
+    const [finalTime, setFinalTime] = useState(0);
 
     useEffect(() => {
         const rightAnswerButton = Math.floor(Math.random() * 4);
-        console.log("Right answer button:", rightAnswerButton);
 
-        setButton1Value(rightAnswerButton === 0 ? (number1 * number2) : Math.floor(Math.random() * 100));
-        setButton2Value(rightAnswerButton === 1 ? (number1 * number2) : Math.floor(Math.random() * 100));
-        setButton3Value(rightAnswerButton === 2 ? (number1 * number2) : Math.floor(Math.random() * 100));
-        setButton4Value(rightAnswerButton === 3 ? (number1 * number2) : Math.floor(Math.random() * 100));
-    }, []);
+        setButton1Value(rightAnswerButton === 0 ? (answer) : Math.floor(Math.random() * 100));
+        setButton2Value(rightAnswerButton === 1 ? (answer) : Math.floor(Math.random() * 100));
+        setButton3Value(rightAnswerButton === 2 ? (answer) : Math.floor(Math.random() * 100));
+        setButton4Value(rightAnswerButton === 3 ? (answer) : Math.floor(Math.random() * 100));
+    }, [answer]);
 
-    function handleButton(event){
+
+    useEffect(() => {
+        let intervalId;
+        if (isRunning) {
+            intervalId = setInterval(() => setTime(time + 1), 1000);
+        }
+        return () => clearInterval(intervalId);
+    }, [isRunning, time]);
+
+    async function newQuestion() {
+        const newNumber1 = Math.floor(Math.random() * 10) + 1;
+        const newNumber2 = Math.floor(Math.random() * 10) + 1;
+        const newAnswer = newNumber1 * newNumber2;
+        const rightAnswerButton = Math.floor(Math.random() * 4);
+
+        await setButton1Value(rightAnswerButton === 0 ? newAnswer : Math.floor(Math.random() * 100));
+        await setButton2Value(rightAnswerButton === 1 ? newAnswer : Math.floor(Math.random() * 100));
+        await setButton3Value(rightAnswerButton === 2 ? newAnswer : Math.floor(Math.random() * 100));
+        await setButton4Value(rightAnswerButton === 3 ? newAnswer : Math.floor(Math.random() * 100));
+
+        await setNumber1(newNumber1);
+        await setNumber2(newNumber2);
+        await setAnswer(newAnswer);
+
+        setIsRunning(true);
+        console.log(time)
+    }
+
+    function handleAnswerButton(event){
         event.preventDefault();
 
         const id = event.currentTarget.getAttribute("id");
@@ -28,12 +68,30 @@ function Multiplication() {
 
         console.log(`Pressed button ${id}`);
         console.log(`Button value: ${value}`);
-
+        if (question === questionCount - 1){
+            console.log("The lesson has ended, returning home!")
+            endLesson()
+        }
         if (value === (number1 * number2)) {
             console.log("Clicked correct button!");
+            setCorrectAmmount(correctAmmount + 1);
+            setQuestion(question + 1);
+            newQuestion();
         } else {
             console.log("Clicked incorrect button!")
+
         }
+    }
+
+    function handleQuitButton(event) {
+        event.preventDefault();
+        navigate("/");
+    }
+
+    async function endLesson(){
+        await setIsEndPopup(true);
+        await setIsRunning(false);
+        await setFinalTime(time)
     }
 
     return(
@@ -45,7 +103,7 @@ function Multiplication() {
                 <div className="w-[70%] pt-10">
                     <progress
                         className="-skew-x-12 bg-offwhite rounded-xl h-10 w-full"
-                        value="0.4"
+                        value={1-((questionCount - question) / questionCount)}
                         max="1"
                         style={{
                             WebkitAppearance: "none",
@@ -68,32 +126,57 @@ function Multiplication() {
     `}
                     </style>
                 </div>
+                <div className="flex justify-center p-10">
+                    <p className="text-5xl">{question}/{questionCount}</p>
+                </div>
             </section>
             <section>
                 <div>
                     <form className="flex flex-col pt-10">
-                        <button id="1" onClick={handleButton}
+                        <button id="1" onClick={handleAnswerButton}
                                 className="ml-[70%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
                             <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button1Value}</p>
                         </button>
-                        <button id="2" onClick={handleButton}
+                        <button id="2" onClick={handleAnswerButton}
                                 className="ml-[50%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
                             <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button2Value}</p>
                         </button>
-                        <button id="3" onClick={handleButton}
+                        <button id="3" onClick={handleAnswerButton}
                                 className="ml-[70%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
                             <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button3Value}</p>
                         </button>
-                        <button id="4" onClick={handleButton}
+                        <button id="4" onClick={handleAnswerButton}
                                 className="ml-[50%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
                             <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button4Value}</p>
                         </button>
-                    </form>
+                    </form>x
                 </div>
             </section>
             <section className="flex justify-center pt-10">
                 <h2 className="text-9xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{number1}*{number2}</h2>
             </section>
+            {isEndPopup && (
+                <section className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
+                    <div className="text-center flex flex-col gap-6 text-2xl pl-40 pr-40 pt-12 pb-12 rounded-3xl -skew-x-12 shadow-lg bg-cyan-950 bg-opacity-70">
+                        <h1 className="text-yellow-200 text-6xl">Level gehaald!</h1>
+                        <div className="flex gap-20">
+                            <div className="text-left flex flex-col gap-2">
+                                <h2>Les voltooid!</h2>
+                                <h2>Vragen goed: {correctAmmount}</h2>
+                                <h2>Tijd gespeeld: {finalTime}s</h2>
+                            </div>
+                            <div className="text-right flex flex-col gap-2">
+                                <h2>5 muntjes</h2>
+                                <h2>{correctAmmount} muntjes</h2>
+                                <h2>3 muntjes</h2>
+                            </div>
+                        </div>
+                        <button onClick={handleQuitButton} className="mt-4 bg-green rounded-lg pb-4 pt-4 text-background shadow-custom-blue">
+                            <p>Terug naar raket</p>
+                        </button>
+                    </div>
+                </section>
+            )}
         </main>
     )
 }
