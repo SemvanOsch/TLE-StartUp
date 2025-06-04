@@ -71,7 +71,7 @@ const HomePage = () => {
 
                 {/* Raket afbeelding */}
                 <img
-                    src="raket.png"
+                    src="testRaket.png"
                     alt="Raket"
                     className="absolute top-1/3 right-[275px] transform -translate-y-1/2 w-80 h-auto"
                 />
