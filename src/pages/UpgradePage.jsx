@@ -52,6 +52,17 @@ const UpgradePage = () => {
             console.log('error adding coins')
         }
     }
+    async function handleLoguout(){
+        try {
+            await fetch("http://localhost:3001/api/game/logout", { method: "POST" });
+
+            localStorage.removeItem("token");
+
+            window.location.href = "/login";
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
 
 
@@ -108,6 +119,7 @@ const UpgradePage = () => {
             <img id={'blackCat'} src={blackcat}/>
             <img id={'spaceshipWindow'} src={spaceshipWindow}/>
             <button onClick={addMoney}>+money</button>
+            <button onClick={handleLoguout}>logout</button>
         </div>
     );
 }
