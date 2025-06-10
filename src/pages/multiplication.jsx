@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router";
+import { motion } from "motion/react"
 
 function Multiplication() {
     const navigate = useNavigate();
@@ -23,6 +24,9 @@ function Multiplication() {
     const [isRunning, setIsRunning] = useState(false);
     const [finalTime, setFinalTime] = useState(0);
 
+    const [x, setX] = useState(150)
+    const [y, setY] = useState(visualViewport.height/2-100)
+    const [rotate, setRotate] = useState(0)
     useEffect(() => {
         const rightAnswerButton = Math.floor(Math.random() * 4);
 
@@ -68,18 +72,30 @@ function Multiplication() {
 
         console.log(`Pressed button ${id}`);
         console.log(`Button value: ${value}`);
+
         if (question === questionCount - 1){
             console.log("The lesson has ended, returning home!")
             endLesson()
         }
         if (value === (number1 * number2)) {
-            console.log("Clicked correct button!");
-            setCorrectAmmount(correctAmmount + 1);
-            setQuestion(question + 1);
-            newQuestion();
+            setX(event.currentTarget.offsetLeft);
+            setY(event.currentTarget.offsetTop);
+
+            const timeout = setTimeout(() => {
+                setX(200);
+                setY(visualViewport.height/2-100)
+
+                console.log("Clicked correct button!");
+                setCorrectAmmount(correctAmmount + 1);
+                setQuestion(question + 1);
+                newQuestion();
+            }, 1500);
         } else {
             console.log("Clicked incorrect button!")
-
+            setRotate(-70)
+            const timeout = setTimeout(() => {
+                setRotate(0)
+            }, 1000);
         }
     }
 
@@ -96,14 +112,18 @@ function Multiplication() {
 
     return(
         <main className="bg-background">
-            <div className="absolute flex flex-col justify-center pl-40 h-full">
+
+            <motion.div
+                animate={{ x, y, rotate}}
+                transition={{ ease: "easeOut", duration: 1 }}
+                className="absolute flex flex-col justify-center z-50">
                 <img src="/images/rocket.png" className="w-80 h-40" alt="Rocket"></img>
-            </div>
+            </motion.div>
             <section className="flex justify-center">
                 <div className="w-[70%] pt-10">
                     <progress
                         className="-skew-x-12 bg-offwhite rounded-xl h-10 w-full"
-                        value={1-((questionCount - question) / questionCount)}
+                        value={1 - ((questionCount - question) / questionCount)}
                         max="1"
                         style={{
                             WebkitAppearance: "none",
@@ -133,31 +153,36 @@ function Multiplication() {
             <section>
                 <div>
                     <form className="flex flex-col pt-10">
-                        <button id="1" onClick={handleAnswerButton}
-                                className="ml-[70%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button1Value}</p>
-                        </button>
-                        <button id="2" onClick={handleAnswerButton}
-                                className="ml-[50%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button2Value}</p>
-                        </button>
-                        <button id="3" onClick={handleAnswerButton}
-                                className="ml-[70%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button3Value}</p>
-                        </button>
-                        <button id="4" onClick={handleAnswerButton}
-                                className="ml-[50%] w-80 h-40 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button4Value}</p>
-                        </button>
-                    </form>x
+                        <motion.button id="1" onClick={handleAnswerButton}
+                                       whileTap={{ scale: 0.90 }}
+                                       className="ml-[70%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button1Value}</p>
+                        </motion.button>
+                        <motion.button id="2" onClick={handleAnswerButton}
+                                       whileTap={{ scale: 0.90 }}
+                                       className="ml-[50%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button2Value}</p>
+                        </motion.button>
+                        <motion.button id="3" onClick={handleAnswerButton}
+                                       whileTap={{ scale: 0.90 }}
+                                       className="ml-[70%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button3Value}</p>
+                        </motion.button>
+                        <motion.button id="4" onClick={handleAnswerButton}
+                                       whileTap={{ scale: 0.90 }}
+                                       className="ml-[50%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button4Value}</p>
+                        </motion.button>
+                    </form>
                 </div>
             </section>
             <section className="flex justify-center pt-10">
-                <h2 className="text-9xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{number1}*{number2}</h2>
+                <h2 className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{number1}*{number2}</h2>
             </section>
             {isEndPopup && (
                 <section className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
-                    <div className="text-center flex flex-col gap-6 text-2xl pl-40 pr-40 pt-12 pb-12 rounded-3xl -skew-x-12 shadow-lg bg-cyan-950 bg-opacity-70">
+                    <div
+                        className="text-center flex flex-col gap-6 text-2xl pl-40 pr-40 pt-12 pb-12 rounded-3xl -skew-x-12 shadow-lg bg-cyan-950 bg-opacity-70">
                         <h1 className="text-yellow-200 text-6xl">Level gehaald!</h1>
                         <div className="flex gap-20">
                             <div className="text-left flex flex-col gap-2">
@@ -171,11 +196,13 @@ function Multiplication() {
                                 <h2>3 muntjes</h2>
                             </div>
                         </div>
-                        <button onClick={handleQuitButton} className="mt-4 bg-RaketGreenBtn rounded-lg pb-4 pt-4 text-background shadow-custom-blue">
+                        <button onClick={handleQuitButton}
+                                className="mt-4 bg-RaketGreenBtn rounded-lg pb-4 pt-4 text-background shadow-custom-blue">
                             <p>Terug naar raket</p>
                         </button>
                     </div>
                 </section>
+
             )}
         </main>
     )
