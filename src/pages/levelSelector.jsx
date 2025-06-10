@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import SterrenBG from "../component/sterrenBG.jsx";
 import alienImg from "../img/alien.png";
 import raketImg from "../img/raket.png";
 import halverraL from "../img/halverraL.png";
@@ -11,6 +12,7 @@ import plusopiaL from "../img/plusopiaL.png";
 import plusopiaR from "../img/plusopiaR.png";
 import xtropilosL from "../img/xtropilosL.png";
 import xtropilosR from "../img/xtropilosR.png";
+
 
 const levels = [
     {
@@ -95,34 +97,22 @@ const LevelSelector = () => {
     }, []);
 
     const handlePlanetClick = () => {
-        navigate("/home");
+        navigate("/multiplication");
     };
 
     return (
         <div className="relative h-screen bg-black text-white overflow-hidden">
-            {/* ✨ Sterren */}
-            {stars.map((star) => (
-                <motion.div
-                    key={star.id}
-                    className="absolute rounded-full bg-white"
-                    style={{
-                        top: `${star.top}%`,
-                        left: `${star.left}%`,
-                        width: `${star.size}px`,
-                        height: `${star.size}px`,
-                        opacity: 0.5,
-                        filter: "drop-shadow(0 0 6px white)",
-                    }}
-                    animate={{
-                        opacity: [0.2, 1, 0.2],
-                    }}
-                    transition={{
-                        repeat: Infinity,
-                        duration: star.duration,
-                        ease: "easeInOut",
-                    }}
-                />
-            ))}
+            <SterrenBG />
+            <div className="absolute top-4 left-4 z-30">
+                <button
+                    onClick={() => navigate("/")}
+                    className="text-white text-2xl hover:scale-110 transition-transform"
+                    title="Ga naar home"
+                >
+                    🏠
+                </button>
+            </div>
+
 
 
             {showShootingStar && (
