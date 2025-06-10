@@ -5,8 +5,8 @@ import StudentOverview from "./pages/StudentOverview.jsx";
 import Student from "./pages/StudentDetails.jsx";
 import Multiplication from "./pages/multiplication.jsx";
 import UpgradePage from "./pages/UpgradePage.jsx";
-
 import LevelSelector from "./pages/LevelSelector.jsx";
+import PlusSums from "./pages/plusSums.jsx";
 
 const router = createBrowserRouter([
     {
@@ -35,9 +35,14 @@ const router = createBrowserRouter([
                 path: '/levels',
                 element: <LevelSelector />,
             },
+            {
+                path: '/plussums',
+                element: <PlusSums/>,
+            }
         ]
     }
 ]);
+
 
 function App() {
   return (
