@@ -6,7 +6,7 @@ const HomePage = () => {
     const navigate = useNavigate();
     const [startTransition, setStartTransition] = useState(false);
     const [startLaunch, setStartLaunch] = useState(false);
-    const [startSpeedUp, setSpeedUp] = useState(false);
+    const [moveRocket, setMoveRocket] = useState(false);
 
     const handleRocketClick = () => {
         setStartTransition(true);
@@ -16,16 +16,19 @@ const HomePage = () => {
     };
 
     const handleLanceerClick = () => {
-        setSpeedUp(true);
         setStartLaunch(true)
         setTimeout(() => {
+            setMoveRocket(true);
+        }, 3000);
+
+        setTimeout(() => {
            navigate("/levels");
-        }, 8000); // wacht tot animatie voorbij is
+        }, 5000); // wacht tot animatie voorbij is
     };
 
     return (
         <div className="relative min-h-screen overflow-hidden">
-            <SterrenBG versneld={startSpeedUp} />
+            <SterrenBG versneld={startLaunch} />
 
             {/* Witte fade overlay */}
             <div
@@ -34,17 +37,11 @@ const HomePage = () => {
                 }`}
             ></div>
 
-            {/*<div*/}
-            {/*    className={`fixed inset-0 bg-white transition-opacity duration-[5500ms] pointer-events-none z-50 ${*/}
-            {/*        startLaunch ? "opacity-100" : "opacity-0"*/}
-            {/*    }`}*/}
-            {/*></div>*/}
-
             {/* Content met zoom-effect op raketpositie */}
             <main
                 className={`relative z-10 min-h-screen transition-transform ease-in-out transform ${
                     startLaunch
-                        ? "scale-[2] origin-[85%_40%] duration-[8000ms]"
+                        ? "scale-[2] origin-[85%_40%] duration-[5000ms]"
                         : startTransition
                             ? "scale-[2] origin-[85%_40%] duration-[1500ms]"
                             : ""
@@ -97,7 +94,11 @@ const HomePage = () => {
                 <img
                     src="testRaket.png"
                     alt="Raket"
-                    className="absolute top-1/3 right-[275px] transform -translate-y-1/2 w-80 h-auto"
+                    className={`absolute top-1/3 right-[275px] transform w-80 h-auto transition-transform ease-in-out ${
+                        moveRocket
+                            ? "duration-[2500ms] -translate-y-[800px]"
+                            : "duration-[0ms] -translate-y-1/2"
+                    }`}
                 />
             </main>
         </div>

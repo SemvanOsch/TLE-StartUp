@@ -113,7 +113,7 @@ const LevelSelector = () => {
     return (
         <div className="relative h-screen bg-black text-white overflow-hidden">
             <div
-                className={`fixed inset-0 bg-background z-50 transition-opacity duration-1000 pointer-events-none ${
+                className={`fixed inset-0 bg-background z-50 transition-opacity duration-[1500ms] pointer-events-none ${
                     fadeOverlayVisible ? 'opacity-100' : 'opacity-0'
                 }`}
             />
