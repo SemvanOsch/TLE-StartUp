@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import SterrenBG from "../component/sterrenBG.jsx";
 import alienImg from "../img/alien.png";
-import raketImg from "../img/raket.png";
+import raketImg from "/testRaket.png";
 import halverraL from "../img/halverraL.png";
 import halverraR from "../img/halverraR.png";
 import minariaL from "../img/minariaL.png";
@@ -111,12 +111,12 @@ const LevelSelector = () => {
     };
 
     return (
-        <div className="relative h-screen bg-black text-white overflow-hidden">
-            <div
-                className={`fixed inset-0 bg-background z-50 transition-opacity duration-[1500ms] pointer-events-none ${
-                    fadeOverlayVisible ? 'opacity-100' : 'opacity-0'
-                }`}
-            />
+        <motion.div
+            className="relative h-screen bg-black text-white overflow-hidden"
+            initial={{ scale: 2, originX: 0.5, originY: 0.90 }} // focus op raket
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+        >
             <SterrenBG />
             <div className="absolute top-4 left-4 z-30">
                 <button
@@ -254,16 +254,10 @@ const LevelSelector = () => {
                     <motion.img
                         src={raketImg}
                         alt="raket"
-                        className="w-130"
-                        animate={{
-                            y: [0, -5, 0, 5, 0],
-                            rotate: [0, 1, 0, -1, 0],
-                        }}
-                        transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                        }}
+                        className="w-40"
+                        initial={{ y: 600, opacity: 0 }}
+                        animate={{ y: 130, opacity: 1 }}
+                        transition={{ duration: 1, ease: "easeOut" }}
                     />
                 </div>
             </div>
@@ -280,7 +274,7 @@ const LevelSelector = () => {
                     transition={{ duration: 0.5 }}
                 />
             )}
-        </div>
+        </motion.div>
     );
 };
 
