@@ -85,6 +85,10 @@ function PlusSums() {
                 Wat is {sum.a} + {sum.b}?
             </div>
 
+            <div id="score-container" className="absolute top-4 right-4 text-xl">
+                Munten: {score}
+            </div>
+
             <form onSubmit={handleSubmit} className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
                 <input
                     type="number"
