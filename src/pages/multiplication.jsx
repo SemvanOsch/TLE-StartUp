@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {useNavigate} from "react-router";
 import { motion } from "motion/react"
+import SterrenBG_Game from "../component/sterrenBG_game.jsx";
 
 function Multiplication() {
     const navigate = useNavigate();
@@ -30,6 +31,8 @@ function Multiplication() {
     const [x, setX] = useState(150)
     const [y, setY] = useState(visualViewport.height/2-100)
     const [rotate, setRotate] = useState(0)
+
+    const [speedMult, setSpeedMult] = useState(1);
     useEffect(() => {
         const rightAnswerButton = Math.floor(Math.random() * 4);
 
@@ -79,12 +82,14 @@ function Multiplication() {
         }
         if (value === (number1 * number2)) {
             setX(event.currentTarget.offsetLeft);
-            setY(event.currentTarget.offsetTop);
+            setY(event.currentTarget.offsetTop + 100);
             setIsCorrect(true);
+            setSpeedMult(8)
             setTimeout(() => {
                 setX(200);
                 setY(visualViewport.height/2-100)
                 setIsCorrect(false);
+                handleSpeed()
                 setCorrectAmmount(correctAmmount + 1);
                 setQuestion(question + 1);
                 newQuestion();
@@ -100,6 +105,13 @@ function Multiplication() {
         }
     }
 
+    async function handleSpeed(){
+        setSpeedMult(4)
+        setTimeout(() => {
+            setSpeedMult(1)
+        }, 500)
+    }
+
     function handleQuitButton(event) {
         event.preventDefault();
         navigate("/");
@@ -113,7 +125,7 @@ function Multiplication() {
 
     return(
         <main className="bg-background">
-
+            <SterrenBG_Game versnelling={speedMult}/>
             <motion.div
                 animate={{ x, y, rotate}}
                 transition={{ ease: "easeOut", duration: 1 }}
@@ -153,7 +165,7 @@ function Multiplication() {
             </section>
             <section>
                 <div>
-                    <form className="flex flex-col pt-10">
+                    <form className="relative flex flex-col pt-10">
                         <motion.button
                             id="1"
                             onClick={handleAnswerButton}
