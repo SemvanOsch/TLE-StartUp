@@ -97,7 +97,7 @@ function Multiplication() {
             setIsIncorrect(true);
             console.log("Clicked incorrect button!")
             setRotate(-70)
-            const timeout = setTimeout(() => {
+            setTimeout(() => {
                 setIsIncorrect(false);
                 setRotate(0)
             }, 1000);
