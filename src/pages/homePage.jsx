@@ -5,6 +5,8 @@ import SterrenBG from "../component/sterrenBG.jsx";
 const HomePage = () => {
     const navigate = useNavigate();
     const [startTransition, setStartTransition] = useState(false);
+    const [startLaunch, setStartLaunch] = useState(false);
+    const [moveRocket, setMoveRocket] = useState(false);
 
     const handleRocketClick = () => {
         setStartTransition(true);
@@ -13,9 +15,20 @@ const HomePage = () => {
         }, 1500); // wacht tot animatie voorbij is
     };
 
+    const handleLanceerClick = () => {
+        setStartLaunch(true)
+        setTimeout(() => {
+            setMoveRocket(true);
+        }, 3000);
+
+        setTimeout(() => {
+           navigate("/levels");
+        }, 5000); // wacht tot animatie voorbij is
+    };
+
     return (
         <div className="relative min-h-screen overflow-hidden">
-            <SterrenBG />
+            <SterrenBG versneld={startLaunch} />
 
             {/* Witte fade overlay */}
             <div
@@ -26,8 +39,12 @@ const HomePage = () => {
 
             {/* Content met zoom-effect op raketpositie */}
             <main
-                className={`relative z-10 min-h-screen transition-transform duration-[1500ms] ease-in-out transform ${
-                    startTransition ? "scale-[2] origin-[85%_40%]" : ""
+                className={`relative z-10 min-h-screen transition-transform ease-in-out transform ${
+                    startLaunch
+                        ? "scale-[2] origin-[85%_40%] duration-[5000ms]"
+                        : startTransition
+                            ? "scale-[2] origin-[85%_40%] duration-[1500ms]"
+                            : ""
                 }`}
             >
                 <h1 className="mt-16 ml-10 text-white text-7xl drop-shadow-[1px_1px_2px_black]">
@@ -45,7 +62,7 @@ const HomePage = () => {
                     <div className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[320px]">
                         <div className="absolute top-1 left-1 bg-orange-500 skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
                         <button className="relative bg-yellow-400 skew-x-[-12deg] rounded px-16 py-6 text-xl font-bold text-black z-10 w-full"
-                        onClick={() => navigate('levels')}
+                        onClick={handleLanceerClick}
                         >
                             <span className="skew-x-[12deg] text-3xl block">Lanceer!</span>
                         </button>
@@ -77,7 +94,11 @@ const HomePage = () => {
                 <img
                     src="testRaket.png"
                     alt="Raket"
-                    className="absolute top-1/3 right-[275px] transform -translate-y-1/2 w-80 h-auto"
+                    className={`absolute top-1/3 right-[275px] transform w-80 h-auto transition-transform ease-in-out ${
+                        moveRocket
+                            ? "duration-[2500ms] -translate-y-[800px]"
+                            : "duration-[0ms] -translate-y-1/2"
+                    }`}
                 />
             </main>
         </div>

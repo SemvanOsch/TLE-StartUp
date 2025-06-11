@@ -66,8 +66,18 @@ const LevelSelector = () => {
     const [showShootingStar, setShowShootingStar] = useState(false);
     const [showAlien, setShowAlien] = useState(false);
     const initialLoad = useRef(true);
+    const [fadeOverlayVisible, setFadeOverlayVisible] = useState(true);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Fade away the white overlay shortly after mount
+        const timeout = setTimeout(() => {
+            setFadeOverlayVisible(false);
+        }, 100); // Slight delay for smoother feel
+
+        return () => clearTimeout(timeout);
+    }, []);
 
     const next = () => {
         setDirection(1);
@@ -102,6 +112,11 @@ const LevelSelector = () => {
 
     return (
         <div className="relative h-screen bg-black text-white overflow-hidden">
+            <div
+                className={`fixed inset-0 bg-background z-50 transition-opacity duration-[1500ms] pointer-events-none ${
+                    fadeOverlayVisible ? 'opacity-100' : 'opacity-0'
+                }`}
+            />
             <SterrenBG />
             <div className="absolute top-4 left-4 z-30">
                 <button
