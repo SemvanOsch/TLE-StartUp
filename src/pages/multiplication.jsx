@@ -19,10 +19,13 @@ function Multiplication() {
     const [question, setQuestion] = useState(0);
     const questionCount = 10;
     const [correctAmmount, setCorrectAmmount] = useState(0);
+    const [isCorrect, setIsCorrect] = useState(false);
+    const [isIncorrect, setIsIncorrect] = useState(false);
 
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
     const [finalTime, setFinalTime] = useState(0);
+
 
     const [x, setX] = useState(150)
     const [y, setY] = useState(visualViewport.height/2-100)
@@ -80,20 +83,22 @@ function Multiplication() {
         if (value === (number1 * number2)) {
             setX(event.currentTarget.offsetLeft);
             setY(event.currentTarget.offsetTop);
-
-            const timeout = setTimeout(() => {
+            setIsCorrect(true);
+            setTimeout(() => {
                 setX(200);
                 setY(visualViewport.height/2-100)
-
+                setIsCorrect(false);
                 console.log("Clicked correct button!");
                 setCorrectAmmount(correctAmmount + 1);
                 setQuestion(question + 1);
                 newQuestion();
             }, 1500);
         } else {
+            setIsIncorrect(true);
             console.log("Clicked incorrect button!")
             setRotate(-70)
             const timeout = setTimeout(() => {
+                setIsIncorrect(false);
                 setRotate(0)
             }, 1000);
         }
@@ -177,7 +182,11 @@ function Multiplication() {
                 </div>
             </section>
             <section className="flex justify-center pt-10">
-                <h2 className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{number1}*{number2}</h2>
+                <h2
+                    className={`text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)] ${
+                        isCorrect ? 'text-green-500' : isIncorrect ? 'text-red-500' : 'text-text'}`}>
+                    {number1} * {number2}
+                </h2>
             </section>
             {isEndPopup && (
                 <section className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
