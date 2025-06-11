@@ -73,9 +73,6 @@ function Multiplication() {
         const id = event.currentTarget.getAttribute("id");
         const value = parseInt(event.currentTarget.querySelector("p").textContent); // convert to number
 
-        console.log(`Pressed button ${id}`);
-        console.log(`Button value: ${value}`);
-
         if (question === questionCount - 1){
             console.log("The lesson has ended, returning home!")
             endLesson()
@@ -88,18 +85,17 @@ function Multiplication() {
                 setX(200);
                 setY(visualViewport.height/2-100)
                 setIsCorrect(false);
-                console.log("Clicked correct button!");
                 setCorrectAmmount(correctAmmount + 1);
                 setQuestion(question + 1);
                 newQuestion();
             }, 1500);
         } else {
+            console.log(`Pressed button ${id}`);
+
             setIsIncorrect(true);
-            console.log("Clicked incorrect button!")
-            setRotate(-70)
+            setRotate(rotate-360)
             setTimeout(() => {
                 setIsIncorrect(false);
-                setRotate(0)
             }, 1000);
         }
     }
@@ -158,26 +154,35 @@ function Multiplication() {
             <section>
                 <div>
                     <form className="flex flex-col pt-10">
-                        <motion.button id="1" onClick={handleAnswerButton}
-                                       whileTap={{ scale: 0.90 }}
-                                       className="ml-[70%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                        <motion.button
+                            id="1"
+                            onClick={handleAnswerButton}
+                            whileTap={{scale: 0.9}}
+                            className="ml-[70%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
                             <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button1Value}</p>
                         </motion.button>
-                        <motion.button id="2" onClick={handleAnswerButton}
-                                       whileTap={{ scale: 0.90 }}
-                                       className="ml-[50%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                        <motion.button
+                            id="2"
+                            onClick={handleAnswerButton}
+                            whileTap={{scale: 0.9}}
+                            className="ml-[50%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
                             <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button2Value}</p>
                         </motion.button>
-                        <motion.button id="3" onClick={handleAnswerButton}
-                                       whileTap={{ scale: 0.90 }}
-                                       className="ml-[70%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                        <motion.button
+                            id="3"
+                            onClick={handleAnswerButton}
+                            whileTap={{scale: 0.9}}
+                            className="ml-[70%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
                             <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button3Value}</p>
                         </motion.button>
-                        <motion.button id="4" onClick={handleAnswerButton}
-                                       whileTap={{ scale: 0.90 }}
-                                       className="ml-[50%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                        <motion.button
+                            id="4"
+                            onClick={handleAnswerButton}
+                            whileTap={{scale: 0.9}}
+                            className="ml-[50%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
                             <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button4Value}</p>
                         </motion.button>
+                        )
                     </form>
                 </div>
             </section>
