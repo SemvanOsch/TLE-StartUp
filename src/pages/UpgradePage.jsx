@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useActionState} from 'react';
 import upgradeButton20 from '/src/images/upgrade20.png'
 import upgradeButton20disabled from '/src/images/upgrade20disabled.png'
 import upgradeButton50 from '/src/images/upgrade50.png'
@@ -13,6 +13,8 @@ import '/src/index.css'
 
 const UpgradePage = () => {
 
+
+
     useEffect(() => {
         async function fetchUser(){
             const token = localStorage.getItem('token')
@@ -26,7 +28,10 @@ const UpgradePage = () => {
             if(response.ok){
                 const user = await response.json()
                 setMoney(user.coins)
+                setUpgradedStage(user.upgradeStage)
                 console.log('ingelogd', user)
+            }else{
+                window.location.href = '/login'
             }
         }
 
@@ -52,6 +57,25 @@ const UpgradePage = () => {
             console.log('error adding coins')
         }
     }
+    async function removeMoney(amount){
+        const token = localStorage.getItem('token')
+        const response = await fetch('http://localhost:3001/api/game/me/coins',{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({ amount })
+        })
+
+        if(response.ok){
+            const data = await response.json()
+            setMoney(data.coins)
+        }else{
+            console.log('error removing coins')
+        }
+    }
     async function handleLoguout(){
         try {
             await fetch("http://localhost:3001/api/game/logout", { method: "POST" });
@@ -63,6 +87,19 @@ const UpgradePage = () => {
             console.error(error);
         }
     };
+
+    async function changeStage(stage){
+        const token = localStorage.getItem('token');
+        const response = await fetch(`http://localhost:3001/api/game/upgrade`, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({stage})
+        });
+    }
 
 
 
@@ -83,6 +120,8 @@ const UpgradePage = () => {
             }
         }
         if(upgradedStage == 2){
+            setBackground(background2)
+            spaceshipWindowImage.style.opacity = 1
             if (money >= 50) {
                 setCurrentButton(upgradeButton50)
             } else {
@@ -91,6 +130,9 @@ const UpgradePage = () => {
         }
         if(upgradedStage == 3){
             setCurrentButton(upgradeButton0)
+            setBackground("")
+            spaceshipWindowImage.style.opacity = 1
+            blackCatImage.style.opacity = 1
         }
     }
 
@@ -98,14 +140,18 @@ const UpgradePage = () => {
         if(upgradedStage == 1 && money >= 20) {
             setMoney(money - 20)
             setUpgradedStage(2)
+            changeStage(2)
             setBackground(background2)
             spaceshipWindowImage.style.opacity = 1
+            removeMoney(-20)
         }
         if(upgradedStage == 2 && money >= 50) {
             setMoney(money - 50)
             setUpgradedStage(3)
+            changeStage(3)
             setBackground("")
             blackCatImage.style.opacity = 1
+            removeMoney(-50)
         }
     }
 

@@ -2,6 +2,7 @@ import {useState} from "react";
 const LoginPage = () => {
 
     const [formData, setFormData] = useState({name: '', password: ''})
+    const [errorMessage, setErrorMessage] = useState()
 
     async function handleLogin(){
             const response = await fetch('http://localhost:3001/api/game/login', {
@@ -19,6 +20,10 @@ const LoginPage = () => {
                 localStorage.setItem('token', token)
                 console.log('inhoud van localstorage', localStorage)
                 console.log('ingelogd')
+                setErrorMessage('')
+                window.location.href = '/home'
+            } else {
+                setErrorMessage('Login mislukt. Check of je gegevens kloppen.');
             }
     }
 
@@ -41,6 +46,7 @@ const LoginPage = () => {
           <input name={'name'} className={'login-input'} value={formData.name} placeholder={'Gebruikersnaam'} onChange={handleInput}/>
           <input name={'password'} className={'login-input'} value={formData.password} placeholder={'Wachtwoord'} onChange={handleInput}/>
           <button id={'loginButton'}>Aan de slag</button>
+            {errorMessage && <p style={{ color: 'red', marginTop: '1em' }}>{errorMessage}</p>}
         </form>
     );
 }
