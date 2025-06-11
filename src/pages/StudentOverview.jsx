@@ -24,9 +24,13 @@ function StudentOverview(){
 
     return (
         <div className="relative bg-background min-h-screen p-8">
-            <SterrenBG/>
+            {/*<SterrenBG/>*/}
             <div className="relative z-10 w-3/5 bg-white mx-auto p-4 rounded-lg">
-                <h1 className="text-black text-2xl font-bold mb-4">Leerlingen</h1>
+                <div className={"flex justify-between content-center"}>
+                    <h1 className="text-black text-2xl font-bold mb-4">Leerlingen</h1>
+                    <a className={"bg-green-500 hover:bg-green-700 flex items-center p-3 rounded-md mb-1"} href={"/student/create"}>Create</a>
+                </div>
+
                 <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {users.map((user, index) => (
                         <a
