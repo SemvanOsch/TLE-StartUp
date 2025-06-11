@@ -3,6 +3,7 @@ import {createBrowserRouter, RouterProvider} from "react-router";
 import HomePage from "./pages/HomePage.jsx";
 import StudentOverview from "./pages/StudentOverview.jsx";
 import Student from "./pages/StudentDetails.jsx";
+import CreateStudent from "./pages/CreateStudent.jsx";
 import Multiplication from "./pages/multiplication.jsx";
 import UpgradePage from "./pages/UpgradePage.jsx";
 
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
             {
                 path: '/student/:id',
                 element: <Student/>,
+            },
+            {
+                path: '/student/create',
+                element: <CreateStudent/>,
             },
             {
                 path: '/',
