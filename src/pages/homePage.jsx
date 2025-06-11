@@ -5,6 +5,7 @@ import SterrenBG from "../component/sterrenBG.jsx";
 const HomePage = () => {
     const navigate = useNavigate();
     const [startTransition, setStartTransition] = useState(false);
+    const [startLaunch, setStartLaunch] = useState(false);
     const [startSpeedUp, setSpeedUp] = useState(false);
 
     const handleRocketClick = () => {
@@ -16,9 +17,10 @@ const HomePage = () => {
 
     const handleLanceerClick = () => {
         setSpeedUp(true);
+        setStartLaunch(true)
         setTimeout(() => {
            navigate("/levels");
-        }, 1500); // wacht tot animatie voorbij is
+        }, 8000); // wacht tot animatie voorbij is
     };
 
     return (
@@ -32,10 +34,20 @@ const HomePage = () => {
                 }`}
             ></div>
 
+            {/*<div*/}
+            {/*    className={`fixed inset-0 bg-white transition-opacity duration-[5500ms] pointer-events-none z-50 ${*/}
+            {/*        startLaunch ? "opacity-100" : "opacity-0"*/}
+            {/*    }`}*/}
+            {/*></div>*/}
+
             {/* Content met zoom-effect op raketpositie */}
             <main
-                className={`relative z-10 min-h-screen transition-transform duration-[1500ms] ease-in-out transform ${
-                    startTransition ? "scale-[2] origin-[85%_40%]" : ""
+                className={`relative z-10 min-h-screen transition-transform ease-in-out transform ${
+                    startLaunch
+                        ? "scale-[2] origin-[85%_40%] duration-[8000ms]"
+                        : startTransition
+                            ? "scale-[2] origin-[85%_40%] duration-[1500ms]"
+                            : ""
                 }`}
             >
                 <h1 className="mt-16 ml-10 text-white text-7xl drop-shadow-[1px_1px_2px_black]">

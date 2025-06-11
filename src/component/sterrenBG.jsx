@@ -27,7 +27,7 @@ const SterrenBG = ({ aantalSterren = 100, versneld = false }) => {
 
         const beweegSterren = () => {
             sterrenRef.current = sterrenRef.current.map((ster) => {
-                let speedFactor = versneld ? 4 : 1; // sneller als versneld aanstaat
+                let speedFactor = versneld ? 12 : 1; // sneller als versneld aanstaat
                 let nieuweY = ster.y + ster.speed * speedFactor;
                 if (nieuweY > 100) {
                     nieuweY = 0;

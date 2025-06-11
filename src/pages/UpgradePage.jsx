@@ -7,6 +7,7 @@ const UpgradePage = () => {
     const [currentButton, setCurrentButton] = useState()
     const [upgradedStage, setUpgradedStage] = useState(1)
     const [background, setBackground] = useState(background1)
+    const [fadeOverlayVisible, setFadeOverlayVisible] = useState(true);
 
     let blackCatImage = document.getElementById('blackCat')
     let spaceshipWindowImage = document.getElementById('spaceshipWindow')
@@ -62,12 +63,20 @@ const UpgradePage = () => {
     }, [money]);
 
     return(
-        <div style={{backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh'}}>
-            <h1 className={'money'}>${money}</h1>
-            <img id={'upgradeButton'} src={currentButton} onClick={useMoney}/>
-            <img id={'blackCat'} src={blackcat}/>
-            <img id={'spaceshipWindow'} src={spaceshipWindow}/>
-            <button onClick={addMoney}>+money</button>
+        <div className="relative min-h-screen bg-background text-text flex flex-col items-center justify-center overflow-hidden">
+            {/* Fade-in white overlay */}
+            <div
+                className={`fixed inset-0 bg-white z-50 transition-opacity duration-1000 pointer-events-none ${
+                    fadeOverlayVisible ? 'opacity-100' : 'opacity-0'
+                }`}
+            />
+            <div style={{backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh'}}>
+                <h1 className={'money'}>${money}</h1>
+                <img id={'upgradeButton'} src={currentButton} onClick={useMoney}/>
+                <img id={'blackCat'} src={blackcat}/>
+                <img id={'spaceshipWindow'} src={spaceshipWindow}/>
+                <button onClick={addMoney}>+money</button>
+            </div>
         </div>
     );
 }
