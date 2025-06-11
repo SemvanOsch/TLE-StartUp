@@ -5,6 +5,7 @@ import SterrenBG from "../component/sterrenBG.jsx";
 const HomePage = () => {
     const navigate = useNavigate();
     const [startTransition, setStartTransition] = useState(false);
+    const [startSpeedUp, setSpeedUp] = useState(false);
 
     const handleRocketClick = () => {
         setStartTransition(true);
@@ -13,9 +14,16 @@ const HomePage = () => {
         }, 1500); // wacht tot animatie voorbij is
     };
 
+    const handleLanceerClick = () => {
+        setSpeedUp(true);
+        setTimeout(() => {
+           navigate("/levels");
+        }, 1500); // wacht tot animatie voorbij is
+    };
+
     return (
         <div className="relative min-h-screen overflow-hidden">
-            <SterrenBG />
+            <SterrenBG versneld={startSpeedUp} />
 
             {/* Witte fade overlay */}
             <div
@@ -45,7 +53,7 @@ const HomePage = () => {
                     <div className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[320px]">
                         <div className="absolute top-1 left-1 bg-orange-500 skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
                         <button className="relative bg-yellow-400 skew-x-[-12deg] rounded px-16 py-6 text-xl font-bold text-black z-10 w-full"
-                        onClick={() => navigate('levels')}
+                        onClick={handleLanceerClick}
                         >
                             <span className="skew-x-[12deg] text-3xl block">Lanceer!</span>
                         </button>

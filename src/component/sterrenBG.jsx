@@ -12,26 +12,24 @@ const genereerSter = () => {
     };
 };
 
-const SterrenBG = ({ aantalSterren = 100 }) => {
+const SterrenBG = ({ aantalSterren = 100, versneld = false }) => {
     const [sterren, setSterren] = useState([]);
     const sterrenRef = useRef([]);
 
-    // Initieel vullen
     useEffect(() => {
         const initSterren = Array.from({ length: aantalSterren }, genereerSter);
         setSterren(initSterren);
         sterrenRef.current = initSterren;
     }, [aantalSterren]);
 
-    // Animatie loop
     useEffect(() => {
         let animId;
 
         const beweegSterren = () => {
             sterrenRef.current = sterrenRef.current.map((ster) => {
-                let nieuweY = ster.y + ster.speed;
+                let speedFactor = versneld ? 4 : 1; // sneller als versneld aanstaat
+                let nieuweY = ster.y + ster.speed * speedFactor;
                 if (nieuweY > 100) {
-                    // Ster opnieuw bovenaan spawnen
                     nieuweY = 0;
                     return { ...genereerSter(), y: nieuweY };
                 }
@@ -44,7 +42,8 @@ const SterrenBG = ({ aantalSterren = 100 }) => {
 
         animId = requestAnimationFrame(beweegSterren);
         return () => cancelAnimationFrame(animId);
-    }, []);
+    }, [versneld]);
+
 
     return (
         <div className="absolute inset-0 z-0 bg-background overflow-hidden">
