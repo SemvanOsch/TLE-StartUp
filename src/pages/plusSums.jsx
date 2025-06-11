@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 function generateSum() {
-    const a = Math.floor(Math.random() * 10);
-    const b = Math.floor(Math.random() * 10);
+    const a = Math.floor(Math.random() * 500);
+    const b = Math.floor(Math.random() * 500);
     return { a, b, answer: a + b };
 }
 
@@ -10,22 +10,20 @@ function PlusSums() {
     const [sum, setSum] = useState(generateSum());
     const [input, setInput] = useState('');
     const [score, setScore] = useState(0);
-    const [gameOver, setGameOver] = useState(false);
     const [meteors, setMeteors] = useState([]);
 
-    // Constante snelheid: van y=0 naar y=100 in 10 seconden
-    // Interval update elke 100ms, dus 100 updates per 10 seconden
-    const speedY = 100 / (10 * 10); // = 1% per 100ms
+    // Raketpositie waar meteorieten naartoe vliegen (in percentages)
+    const rocketPosition = { x: 50, y: 95 };
 
-    // Nieuwe meteoor toevoegen, max 3 tegelijk
+    const speed = 0.4;
+
+    // Nieuwe meteoor toevoegen
     useEffect(() => {
         const interval = setInterval(() => {
             setMeteors(prev => {
-                if (prev.length >= 3) return prev;
+                if (prev.length >= 2) return prev;
 
-                // Meteoor start x rondom midden +/- 15%
                 const startX = 50 + (Math.random() * 30 - 15);
-
                 const newMeteor = {
                     id: Date.now(),
                     x: startX,
@@ -34,54 +32,52 @@ function PlusSums() {
 
                 return [...prev, newMeteor];
             });
-        }, 3000); // elke 3 seconden een nieuwe meteor
+        }, 2500);
 
         return () => clearInterval(interval);
     }, []);
 
-    // Meteoren bewegen
+    // Meteorieten bewegen naar raket
     useEffect(() => {
         const interval = setInterval(() => {
             setMeteors(prev =>
                 prev
-                    .map(m => ({ ...m, y: m.y + speedY }))
-                    .filter(m => {
-                        if (m.y >= 100) {
-                            setGameOver(true);
-                            return false;
-                        }
-                        return true;
+                    .map(m => {
+                        const dx = rocketPosition.x - m.x;
+                        const dy = rocketPosition.y - m.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if (dist < 1) return null; // Meteoor is "geraakt"
+
+                        // Richtingsvector normaliseren
+                        const vx = (dx / dist) * speed;
+                        const vy = (dy / dist) * speed;
+
+                        return {
+                            ...m,
+                            x: m.x + vx,
+                            y: m.y + vy,
+                        };
                     })
+                    .filter(Boolean) // verwijder null (geraakte meteoren)
             );
         }, 100);
 
         return () => clearInterval(interval);
-    }, [speedY]);
+    }, []);
 
     // Behandel antwoord
     const handleSubmit = (e) => {
         e.preventDefault();
         if (parseInt(input) === sum.answer) {
-            // Verwijder de eerste meteor (dichtstbijzijnde)
             setMeteors(prev => prev.slice(1));
             setScore(score + 1);
             setSum(generateSum());
             setInput('');
-            if (score + 1 >= 10) {
-                setGameOver(true);
-            }
         } else {
             setInput('');
         }
     };
-
-    if (gameOver) {
-        return (
-            <main className="p-4 text-center">
-                <h1 className="text-2xl">{score >= 10 ? "🎉 Level gehaald!" : "💥 Game Over"}</h1>
-            </main>
-        );
-    }
 
     return (
         <main className="relative w-full h-screen bg-background text-white overflow-hidden">
@@ -89,7 +85,7 @@ function PlusSums() {
                 Wat is {sum.a} + {sum.b}?
             </div>
 
-            <form onSubmit={handleSubmit} className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+            <form onSubmit={handleSubmit} className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
                 <input
                     type="number"
                     value={input}
@@ -108,11 +104,23 @@ function PlusSums() {
                     style={{
                         left: `${meteor.x}%`,
                         top: `${meteor.y}%`,
-                        transform: 'translateX(-50%)',
-                        transition: 'top 0.1s linear',
+                        transform: 'translate(-50%, -50%)',
+                        transition: 'top 0.1s linear, left 0.1s linear',
                     }}
                 />
             ))}
+
+            {/* Raketplek */}
+            <div
+                className="absolute w-12 h-12 bg-gray-300 rounded-full border border-white"
+                style={{
+                    left: `${rocketPosition.x}%`,
+                    top: `${rocketPosition.y}%`,
+                    transform: 'translate(-50%, -50%)',
+                }}
+            >
+                🚀
+            </div>
         </main>
     );
 }
