@@ -20,6 +20,8 @@ export default {
             animation: {
                 moveStars: "moveStars 100s linear infinite",
                 fadeIn: "fadeIn 2s ease-in forwards",
+                spinLeft: "spin-left 5s linear infinite",
+                spinRight: "spin-right 5s linear infinite",
             },
             keyframes: {
                 moveStars: {
@@ -29,6 +31,14 @@ export default {
                 fadeIn: {
                     "0%": { opacity: 0 },
                     "100%": { opacity: 1 },
+                },
+                'spin-left': {
+                    from: { transform: 'rotate(0deg)' },
+                    to: { transform: 'rotate(-360deg)' },
+                },
+                'spin-right': {
+                    from: { transform: 'rotate(0deg)' },
+                    to: { transform: 'rotate(360deg)' },
                 },
             },
         },

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import SterrenBG from "../component/sterrenBG.jsx";
 
 function generateSum() {
     const a = Math.floor(Math.random() * 500);
@@ -17,7 +18,6 @@ function PlusSums() {
     const rocketPosition = { x: 50, y: 95 };
     const speed = 0.4;
 
-    // Countdown timer
     useEffect(() => {
         if (gameOver) return;
         const interval = setInterval(() => {
@@ -33,20 +33,27 @@ function PlusSums() {
         return () => clearInterval(interval);
     }, [gameOver]);
 
-    // Nieuwe meteoor toevoegen
     useEffect(() => {
         if (gameOver) return;
         const interval = setInterval(() => {
             setMeteors(prev => {
                 if (prev.length >= 2) return prev;
                 const startX = 50 + (Math.random() * 30 - 15);
-                return [...prev, { id: Date.now(), x: startX, y: 0 }];
+                return [
+                    ...prev,
+                    {
+                        id: Date.now(),
+                        x: startX,
+                        y: 0,
+                        size: Math.floor(Math.random() * 50) + 30,
+                        spin: Math.random() > 0.5 ? 'spin-left' : 'spin-right',
+                    },
+                ];
             });
         }, 2500);
         return () => clearInterval(interval);
     }, [gameOver]);
 
-    // Meteorieten bewegen
     useEffect(() => {
         if (gameOver) return;
         const interval = setInterval(() => {
@@ -78,12 +85,13 @@ function PlusSums() {
     };
 
     const handleBackToHome = () => {
-        window.location.href = '/'; // Of gebruik navigate('/') als je React Router gebruikt
+        window.location.href = '/';
     };
 
     return (
         <main className="relative w-full h-screen bg-background text-white overflow-hidden">
-            {/* Kleine tijdbalk linksboven */}
+            <SterrenBG />
+            {/* Kleine tijdbalk */}
             <div className="absolute top-2 left-2 w-[150px] h-2 bg-gray-700 rounded overflow-hidden shadow-md">
                 <div
                     className="h-full bg-green-500 transition-all duration-1000"
@@ -92,16 +100,16 @@ function PlusSums() {
             </div>
 
             {/* Vraag */}
-            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-2xl">
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-5xl">
                 Wat is {sum.a} + {sum.b}?
             </div>
 
-            {/* Score rechtsboven */}
+            {/* Score */}
             <div id="score-container" className="absolute top-4 right-4 text-xl">
                 Munten: {score}
             </div>
 
-            {/* Formulier */}
+            {/* Input */}
             <form onSubmit={handleSubmit} className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
                 <input
                     type="number"
@@ -122,12 +130,16 @@ function PlusSums() {
 
             {/* Meteoren */}
             {meteors.map(meteor => (
-                <div
+                <img
                     key={meteor.id}
-                    className="absolute bg-red-600 w-8 h-8 rounded-full"
+                    src="/meteor.png"
+                    alt="Meteor"
+                    className={`absolute pointer-events-none ${meteor.spin}`}
                     style={{
                         left: `${meteor.x}%`,
                         top: `${meteor.y}%`,
+                        width: `${meteor.size}px`,
+                        height: `${meteor.size}px`,
                         transform: 'translate(-50%, -50%)',
                         transition: 'top 0.1s linear, left 0.1s linear',
                     }}
@@ -146,7 +158,7 @@ function PlusSums() {
                 🚀
             </div>
 
-            {/* Game Over overlay */}
+            {/* Game Over Overlay */}
             {gameOver && (
                 <div className="absolute inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center text-center p-4">
                     <h2 className="text-3xl font-bold mb-4">⏰ Tijd is op!</h2>
