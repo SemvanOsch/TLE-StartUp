@@ -47,3 +47,32 @@ body {
     right: 100px;
     opacity: 0;
 }
+
+/* Login Page */
+.login-title{
+    font-size: 50px;
+    margin-bottom: 30px;
+}
+
+.login-input {
+    width: 300px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background-color: #aeaeae;
+    font-weight: bold;
+    text-align: center;
+}
+
+.login-input::placeholder{
+    color: #6e6e6e;
+}
+
+#loginContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
