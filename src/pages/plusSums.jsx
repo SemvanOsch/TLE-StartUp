@@ -14,9 +14,10 @@ function PlusSums() {
     const [meteors, setMeteors] = useState([]);
     const [timeLeft, setTimeLeft] = useState(60);
     const [gameOver, setGameOver] = useState(false);
+    const [scoreIndicators, setScoreIndicators] = useState([]);
 
     const rocketPosition = { x: 50, y: 95 };
-    const speed = 0.25;
+    const speed = 0.15;
 
     useEffect(() => {
         if (gameOver) return;
@@ -77,7 +78,22 @@ function PlusSums() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (parseInt(input) === sum.answer) {
-            setMeteors(prev => prev.slice(1));
+            setMeteors(prev => {
+                const [first, ...rest] = prev;
+                if (first) {
+                    const indicatorId = first.id;
+                    setScoreIndicators(indicators => [
+                        ...indicators,
+                        { id: indicatorId, x: first.x, y: first.y }
+                    ]);
+                    setTimeout(() => {
+                        setScoreIndicators(indicators =>
+                            indicators.filter(i => i.id !== indicatorId)
+                        );
+                    }, 3000);
+                }
+                return rest;
+            });
             setScore(prev => prev + 1);
             setSum(generateSum());
         }
@@ -93,7 +109,7 @@ function PlusSums() {
             <SterrenBG />
 
             {/* Tijdbalk */}
-            <div className="absolute top-2 left-2 w-[150px] h-2 bg-gray-700 rounded overflow-hidden shadow-md">
+            <div className="absolute top-2 left-2 w-[150px] h-2 bg-gray-700 rounded overflow-hidden shadow-md z-40">
                 <div
                     className="h-full bg-green-500 transition-all duration-1000"
                     style={{ width: `${(timeLeft / 60) * 100}%` }}
@@ -101,12 +117,12 @@ function PlusSums() {
             </div>
 
             {/* Vraag */}
-            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-5xl z-30">
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-5xl z-40">
                 Wat is {sum.a} + {sum.b}?
             </div>
 
             {/* Score */}
-            <div id="score-container" className="absolute top-4 right-4 text-xl">
+            <div id="score-container" className="absolute top-4 right-4 text-xl z-40">
                 Munten: {score}
             </div>
 
@@ -118,7 +134,7 @@ function PlusSums() {
                     bottom: '5px',
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    zIndex: 10,
+                    zIndex: 40,
                 }}
             >
                 <input
@@ -130,7 +146,6 @@ function PlusSums() {
                     disabled={gameOver}
                     placeholder="Jouw antwoord"
                 />
-
                 <button
                     type="submit"
                     className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200 disabled:opacity-50"
@@ -154,8 +169,25 @@ function PlusSums() {
                         height: `${meteor.size}px`,
                         transform: 'translate(-50%, -50%)',
                         transition: 'top 0.1s linear, left 0.1s linear',
+                        zIndex: 10,
                     }}
                 />
+            ))}
+
+            {/* +1 Score Indicator */}
+            {scoreIndicators.map(indicator => (
+                <div
+                    key={indicator.id}
+                    className="absolute text-green-400 font-bold text-xl animate-pulse"
+                    style={{
+                        left: `${indicator.x}%`,
+                        top: `${indicator.y}%`,
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: 20,
+                    }}
+                >
+                    +1
+                </div>
             ))}
 
             {/* Raket */}
@@ -170,12 +202,13 @@ function PlusSums() {
                     width: '500px',
                     height: '350px',
                     pointerEvents: 'none',
+                    zIndex: 30,
                 }}
             />
 
             {/* Game Over Overlay */}
             {gameOver && (
-                <div className="absolute inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center text-center p-4">
+                <div className="absolute inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center text-center p-4 z-50">
                     <h2 className="text-3xl font-bold mb-4">⏰ Tijd is op!</h2>
                     <p className="text-xl mb-6">Je eindscore: <strong>{score}</strong></p>
                     <button
