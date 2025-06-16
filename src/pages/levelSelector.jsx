@@ -25,7 +25,7 @@ const levels = [
         leftArrow: plusopiaL,
         rightArrow: plusopiaR,
         planetImg: plusopiaa,
-        path: "/multiplication"
+        path: "/plusSums"
     },
     {
         name: "Minaria",
@@ -43,7 +43,7 @@ const levels = [
         leftArrow: xtropilosL,
         rightArrow: xtropilosR,
         planetImg: xtropiloss,
-        path: "/"
+        path: "/multiplication"
     },
     {
         name: "Halverra",
