@@ -6,16 +6,16 @@ import alienImg from "../img/alien.png";
 import raketImg from "../img/rocket.png";
 import halverraL from "../img/halverraL.png";
 import halverraR from "../img/halverraR.png";
-import halverraa from "../img/halverraa.png";
+import halverraa from "/planeten/Halverra.png";
 import minariaL from "../img/minariaL.png";
 import minariaR from "../img/minariaR.png";
-import minariaa from "../img/minariaa.png";
+import minariaa from "/planeten/Minaria.png";
 import plusopiaL from "../img/plusopiaL.png";
 import plusopiaR from "../img/plusopiaR.png";
-import plusopiaa from "../img/plusopiaa.png";
+import plusopiaa from "/planeten/Plusopia.png";
 import xtropilosL from "../img/xtropilosL.png";
 import xtropilosR from "../img/xtropilosR.png";
-import xtropiloss from "../img/xtropiloss.png";
+import xtropiloss from "/planeten/Xtropolis.png";
 
 const levels = [
     {
@@ -217,8 +217,8 @@ const LevelSelector = () => {
                                 alt={`${levels[index].name} planeet`}
                                 className={`object-contain ${
                                     levels[index].name === 'Plusopia'
-                                        ? 'w-[22rem] h-[22rem] -mt-6'
-                                        : 'w-[18rem] h-[18rem]'
+                                        ? 'w-[28rem] h-[28rem] -mt-6'
+                                        : 'w-[22rem] h-[22rem]'
                                 }`}
                             />
 
@@ -259,7 +259,7 @@ const LevelSelector = () => {
 
                 <div className="absolute bottom-[-50px] z-10 overflow-hidden h-40 w-40">
                     <motion.img
-                        src={raketImg}
+                        src={'testRaket.png'}
                         alt="raket"
                         className="w-full h-auto object-contain"
                         animate={{
