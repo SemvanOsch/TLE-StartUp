@@ -108,6 +108,12 @@ const LevelSelector = () => {
     };
 
     return (
+        <motion.div
+            className="relative h-screen bg-black text-white overflow-hidden"
+            initial={{ scale: 1.5, originX: 0.5, originY: 0.90 }} // focus op raket
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+        >
         <div className="relative h-screen bg-black text-white overflow-hidden">
             <SterrenBG />
             <div className="absolute top-4 left-4 z-30">
@@ -259,6 +265,7 @@ const LevelSelector = () => {
                 />
             )}
         </div>
+        </motion.div>
     );
 };
 
