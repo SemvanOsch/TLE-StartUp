@@ -18,15 +18,15 @@ function Multiplication() {
     const [answer,setAnswer] = useState(number1 * number2);
 
     const [question, setQuestion] = useState(0);
-    const questionCount = 10;
+    const questionCount = 5;
     const [correctAmmount, setCorrectAmmount] = useState(0);
     const [isCorrect, setIsCorrect] = useState(false);
     const [isIncorrect, setIsIncorrect] = useState(false);
+    const [incorrectButtonId, setIncorrectButtonId] = useState(null);
 
     const [time, setTime] = useState(0);
     const [isRunning, setIsRunning] = useState(false);
     const [finalTime, setFinalTime] = useState(0);
-
 
     const [x, setX] = useState(150)
     const [y, setY] = useState(visualViewport.height/2-100)
@@ -96,11 +96,13 @@ function Multiplication() {
             }, 1500);
         } else {
             console.log(`Pressed button ${id}`);
-
             setIsIncorrect(true);
-            setRotate(rotate-360)
+            setIncorrectButtonId(id); // 👈 set the incorrect button ID
+            setRotate(rotate - 360);
+
             setTimeout(() => {
                 setIsIncorrect(false);
+                setIncorrectButtonId(null); // optionally reset after some time
             }, 1000);
         }
     }
@@ -129,7 +131,7 @@ function Multiplication() {
             <motion.div
                 animate={{ x, y, rotate}}
                 transition={{ ease: "easeOut", duration: 1 }}
-                className="absolute flex flex-col justify-center z-50">
+                className="absolute flex flex-col justify-center z-40">
                 <img src="/images/rocket.png" className="w-80 h-40" alt="Rocket"></img>
             </motion.div>
             <section className="fixed bottom-10 flex justify-center w-full">
@@ -167,6 +169,7 @@ function Multiplication() {
                 <div>
                     <form className="relative flex flex-col pt-10">
                         <motion.button
+                            key="1"
                             id="1"
                             onClick={handleAnswerButton}
                             whileTap={{scale: 0.9}}
@@ -174,6 +177,7 @@ function Multiplication() {
                             <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button1Value}</p>
                         </motion.button>
                         <motion.button
+                            key="2"
                             id="2"
                             onClick={handleAnswerButton}
                             whileTap={{scale: 0.9}}
@@ -181,6 +185,7 @@ function Multiplication() {
                             <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button2Value}</p>
                         </motion.button>
                         <motion.button
+                            key="3"
                             id="3"
                             onClick={handleAnswerButton}
                             whileTap={{scale: 0.9}}
@@ -188,6 +193,7 @@ function Multiplication() {
                             <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button3Value}</p>
                         </motion.button>
                         <motion.button
+                            key="4"
                             id="4"
                             onClick={handleAnswerButton}
                             whileTap={{scale: 0.9}}
@@ -206,7 +212,7 @@ function Multiplication() {
                 </h2>
             </section>
             {isEndPopup && (
-                <section className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
+                <section className="z-50 fixed inset-0 flex items-center justify-center bg-black bg-opacity-30">
                     <div
                         className="text-center flex flex-col gap-6 text-2xl pl-40 pr-40 pt-12 pb-12 rounded-3xl -skew-x-12 shadow-lg bg-cyan-950 bg-opacity-70">
                         <h1 className="text-yellow-200 text-6xl">Level gehaald!</h1>
