@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import SterrenBG from "../component/sterrenBG.jsx";
 import alienImg from "../img/alien.png";
-import raketImg from "../img/raket.png";
+import raketImg from "/testRaket.png";
 import halverraL from "../img/halverraL.png";
 import halverraR from "../img/halverraR.png";
 import minariaL from "../img/minariaL.png";
@@ -11,6 +12,7 @@ import plusopiaL from "../img/plusopiaL.png";
 import plusopiaR from "../img/plusopiaR.png";
 import xtropilosL from "../img/xtropilosL.png";
 import xtropilosR from "../img/xtropilosR.png";
+
 
 const levels = [
     {
@@ -58,14 +60,46 @@ const generateStars = (num) => {
 };
 
 const LevelSelector = () => {
+    useEffect(() => {
+        async function fetchUser(){
+            const token = localStorage.getItem('token')
+            const response = await fetch('http://localhost:3001/api/game/me',{
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if(response.ok){
+                const user = await response.json()
+                setUser(user)
+                console.log('ingelogd', user)
+            }else{
+                window.location.href = '/login'
+            }
+        }
+
+        fetchUser()
+    }, []);
+
     const [index, setIndex] = useState(0);
     const [direction, setDirection] = useState(0);
     const [stars, setStars] = useState(generateStars(150));
     const [showShootingStar, setShowShootingStar] = useState(false);
     const [showAlien, setShowAlien] = useState(false);
     const initialLoad = useRef(true);
+    const [fadeOverlayVisible, setFadeOverlayVisible] = useState(true);
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Fade away the white overlay shortly after mount
+        const timeout = setTimeout(() => {
+            setFadeOverlayVisible(false);
+        }, 100); // Slight delay for smoother feel
+
+        return () => clearTimeout(timeout);
+    }, []);
 
     const next = () => {
         setDirection(1);
@@ -95,34 +129,27 @@ const LevelSelector = () => {
     }, []);
 
     const handlePlanetClick = () => {
-        navigate("/home");
+        navigate("/multiplication");
     };
 
     return (
-        <div className="relative h-screen bg-black text-white overflow-hidden">
-            {/* ✨ Sterren */}
-            {stars.map((star) => (
-                <motion.div
-                    key={star.id}
-                    className="absolute rounded-full bg-white"
-                    style={{
-                        top: `${star.top}%`,
-                        left: `${star.left}%`,
-                        width: `${star.size}px`,
-                        height: `${star.size}px`,
-                        opacity: 0.5,
-                        filter: "drop-shadow(0 0 6px white)",
-                    }}
-                    animate={{
-                        opacity: [0.2, 1, 0.2],
-                    }}
-                    transition={{
-                        repeat: Infinity,
-                        duration: star.duration,
-                        ease: "easeInOut",
-                    }}
-                />
-            ))}
+        <motion.div
+            className="relative h-screen bg-black text-white overflow-hidden"
+            initial={{ scale: 1.5, originX: 0.5, originY: 0.90 }} // focus op raket
+            animate={{ scale: 1 }}
+            transition={{ duration: 1.5, ease: "easeOut" }}
+        >
+            <SterrenBG />
+            <div className="absolute top-4 left-4 z-30">
+                <button
+                    onClick={() => navigate("/")}
+                    className="text-white text-2xl hover:scale-110 transition-transform"
+                    title="Ga naar home"
+                >
+                    🏠
+                </button>
+            </div>
+
 
 
             {showShootingStar && (
@@ -249,16 +276,10 @@ const LevelSelector = () => {
                     <motion.img
                         src={raketImg}
                         alt="raket"
-                        className="w-130"
-                        animate={{
-                            y: [0, -5, 0, 5, 0],
-                            rotate: [0, 1, 0, -1, 0],
-                        }}
-                        transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                        }}
+                        className="w-40"
+                        initial={{ y: 600, opacity: 0 }}
+                        animate={{ y: 130, opacity: 1 }}
+                        transition={{ duration: 1, ease: "easeOut" }}
                     />
                 </div>
             </div>
@@ -275,7 +296,7 @@ const LevelSelector = () => {
                     transition={{ duration: 0.5 }}
                 />
             )}
-        </div>
+        </motion.div>
     );
 };
 
