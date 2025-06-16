@@ -4,6 +4,29 @@ import { motion } from "motion/react"
 import SterrenBG_Game from "../component/sterrenBG_game.jsx";
 
 function Multiplication() {
+
+    useEffect(() => {
+        async function fetchUser(){
+            const token = localStorage.getItem('token')
+            const response = await fetch('http://localhost:3001/api/game/me',{
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if(response.ok){
+                const user = await response.json()
+                setUser(user)
+                console.log('ingelogd', user)
+            }else{
+                window.location.href = '/login'
+            }
+        }
+
+        fetchUser()
+    }, []);
+
     const navigate = useNavigate();
 
     const [isEndPopup, setIsEndPopup] = useState(false);
