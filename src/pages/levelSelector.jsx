@@ -67,6 +67,28 @@ const generateStars = (num) => {
 };
 
 const LevelSelector = () => {
+    useEffect(() => {
+        async function fetchUser(){
+            const token = localStorage.getItem('token')
+            const response = await fetch('http://localhost:3001/api/game/me',{
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if(response.ok){
+                const user = await response.json()
+                setUser(user)
+                console.log('ingelogd', user)
+            }else{
+                window.location.href = '/login'
+            }
+        }
+
+        fetchUser()
+    }, []);
+
     const [index, setIndex] = useState(0);
     const [direction, setDirection] = useState(0);
     const [stars, setStars] = useState(generateStars(150));
