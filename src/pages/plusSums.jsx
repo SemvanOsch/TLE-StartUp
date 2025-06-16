@@ -17,7 +17,7 @@ function PlusSums() {
     const [scoreIndicators, setScoreIndicators] = useState([]);
 
     const rocketPosition = { x: 50, y: 95 };
-    const speed = 0.25;
+    const speed = 0.15;
 
     useEffect(() => {
         if (gameOver) return;
