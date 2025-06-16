@@ -6,6 +6,9 @@ export default {
     ],
     theme: {
         extend: {
+            boxShadow: {
+                'custom-blue': '0px 10px #00FFD4',
+            },
             fontFamily: {
                 ArialRounded: ['Arial Rounded MT Bold'],
             },

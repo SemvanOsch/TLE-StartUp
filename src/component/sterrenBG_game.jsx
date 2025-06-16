@@ -12,7 +12,7 @@ const genereerSter = () => {
     };
 };
 
-const SterrenBG = ({ aantalSterren = 100, versneld = false }) => {
+const SterrenBG_Game = ({ aantalSterren = 100, versnelling = 1 }) => {
     const [sterren, setSterren] = useState([]);
     const sterrenRef = useRef([]);
 
@@ -27,13 +27,14 @@ const SterrenBG = ({ aantalSterren = 100, versneld = false }) => {
 
         const beweegSterren = () => {
             sterrenRef.current = sterrenRef.current.map((ster) => {
-                let speedFactor = versneld ? 12 : 1; // sneller als versneld aanstaat
-                let nieuweY = ster.y + ster.speed * speedFactor;
-                if (nieuweY > 100) {
-                    nieuweY = 0;
-                    return { ...genereerSter(), y: nieuweY };
+                let nieuweX = ster.x - ster.speed * versnelling;
+
+                if (nieuweX < 0) {
+                    nieuweX = 100;
+                    return { ...genereerSter(), x: nieuweX };
                 }
-                return { ...ster, y: nieuweY };
+
+                return { ...ster, x: nieuweX };
             });
 
             setSterren([...sterrenRef.current]);
@@ -42,8 +43,7 @@ const SterrenBG = ({ aantalSterren = 100, versneld = false }) => {
 
         animId = requestAnimationFrame(beweegSterren);
         return () => cancelAnimationFrame(animId);
-    }, [versneld]);
-
+    }, [versnelling]);
 
     return (
         <div className="absolute inset-0 z-0 bg-background overflow-hidden">
@@ -65,4 +65,4 @@ const SterrenBG = ({ aantalSterren = 100, versneld = false }) => {
     );
 };
 
-export default SterrenBG;
+export default SterrenBG_Game;

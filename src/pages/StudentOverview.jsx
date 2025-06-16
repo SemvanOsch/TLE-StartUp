@@ -2,6 +2,32 @@ import { useEffect, useState } from "react";
 import SterrenBG from "../component/SterrenBG.jsx";
 
 function StudentOverview(){
+    useEffect(() => {
+        async function fetchUser(){
+            const token = localStorage.getItem('token')
+            const response = await fetch('http://localhost:3001/api/game/me',{
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if (response.ok) {
+                const user = await response.json()
+                if (user.role === 1) {
+                    console.log('ingelogd', user)
+                } else {
+                    window.location.href = '/'
+                }
+            } else {
+                window.location.href = '/login'
+            }
+        }
+
+
+        fetchUser()
+    }, []);
+
     const [users, setUsers] = useState([]);
     async function fetchData() {
         try {
@@ -24,9 +50,13 @@ function StudentOverview(){
 
     return (
         <div className="relative bg-background min-h-screen p-8">
-            <SterrenBG/>
+            {/*<SterrenBG/>*/}
             <div className="relative z-10 w-3/5 bg-white mx-auto p-4 rounded-lg">
-                <h1 className="text-black text-2xl font-bold mb-4">Leerlingen</h1>
+                <div className={"flex justify-between content-center"}>
+                    <h1 className="text-black text-2xl font-bold mb-4">Leerlingen</h1>
+                    <a className={"bg-green-500 hover:bg-green-700 flex items-center p-3 rounded-md mb-1"} href={"/student/create"}>Create</a>
+                </div>
+
                 <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {users.map((user, index) => (
                         <a
