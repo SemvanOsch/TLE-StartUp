@@ -92,7 +92,7 @@ function Multiplication() {
         }
 
         if (value === (number1 * number2)) {
-            setX(event.currentTarget.offsetLeft);
+            setX(event.currentTarget.offsetLeft - 80);
             setY(event.currentTarget.offsetTop + 100);
             setIsCorrect(true);
             setSpeedMult(8);
