@@ -12,11 +12,11 @@ function PlusSums() {
     const [input, setInput] = useState('');
     const [score, setScore] = useState(0);
     const [meteors, setMeteors] = useState([]);
-    const [timeLeft, setTimeLeft] = useState(120);
+    const [timeLeft, setTimeLeft] = useState(60);
     const [gameOver, setGameOver] = useState(false);
 
     const rocketPosition = { x: 50, y: 95 };
-    const speed = 0.4;
+    const speed = 0.25;
 
     useEffect(() => {
         if (gameOver) return;
@@ -46,7 +46,7 @@ function PlusSums() {
                         x: startX,
                         y: 0,
                         size: Math.floor(Math.random() * 50) + 30,
-                        spin: Math.random() > 0.5 ? 'spin-left' : 'spin-right',
+                        spin: Math.random() > 1 ? 'spin-left' : 'spin-right',
                     },
                 ];
             });
@@ -91,16 +91,17 @@ function PlusSums() {
     return (
         <main className="relative w-full h-screen bg-background text-white overflow-hidden">
             <SterrenBG />
-            {/* Kleine tijdbalk */}
+
+            {/* Tijdbalk */}
             <div className="absolute top-2 left-2 w-[150px] h-2 bg-gray-700 rounded overflow-hidden shadow-md">
                 <div
                     className="h-full bg-green-500 transition-all duration-1000"
-                    style={{ width: `${(timeLeft / 120) * 100}%` }}
+                    style={{ width: `${(timeLeft / 60) * 100}%` }}
                 />
             </div>
 
             {/* Vraag */}
-            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-5xl">
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-5xl z-30">
                 Wat is {sum.a} + {sum.b}?
             </div>
 
@@ -109,19 +110,30 @@ function PlusSums() {
                 Munten: {score}
             </div>
 
-            {/* Input */}
-            <form onSubmit={handleSubmit} className="absolute bottom-20 left-1/2 transform -translate-x-1/2">
+            {/* Input boven raket */}
+            <form
+                onSubmit={handleSubmit}
+                className="absolute flex items-center gap-2"
+                style={{
+                    bottom: '5px',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    zIndex: 10,
+                }}
+            >
                 <input
                     type="number"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    className="text-black p-2 rounded"
+                    className="bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [-moz-appearance:textfield]"
                     autoFocus
                     disabled={gameOver}
+                    placeholder="Jouw antwoord"
                 />
+
                 <button
                     type="submit"
-                    className="ml-2 bg-white text-black p-2 rounded"
+                    className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md transition-all duration-200 disabled:opacity-50"
                     disabled={gameOver}
                 >
                     Antwoord
@@ -147,16 +159,19 @@ function PlusSums() {
             ))}
 
             {/* Raket */}
-            <div
-                className="absolute w-12 h-12 bg-gray-300 rounded-full border border-white flex items-center justify-center text-xl"
+            <img
+                src="/rocket.png"
+                alt="Raket"
+                className="absolute"
                 style={{
-                    left: `${rocketPosition.x}%`,
-                    top: `${rocketPosition.y}%`,
-                    transform: 'translate(-50%, -50%)',
+                    left: '50%',
+                    top: 'calc(100% - 200px)',
+                    transform: 'translate(-50%, 0)',
+                    width: '500px',
+                    height: '350px',
+                    pointerEvents: 'none',
                 }}
-            >
-                🚀
-            </div>
+            />
 
             {/* Game Over Overlay */}
             {gameOver && (
