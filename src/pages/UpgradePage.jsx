@@ -12,9 +12,6 @@ import '/src/index.css'
 
 
 const UpgradePage = () => {
-
-
-
     useEffect(() => {
         async function fetchUser(){
             const token = localStorage.getItem('token')
