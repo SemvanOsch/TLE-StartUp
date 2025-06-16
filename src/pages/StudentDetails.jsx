@@ -33,11 +33,11 @@ function Student() {
         fetchData();
     }, [id]);
 
-    if (!user) return <div className="text-white p-4">Gebruiker niet gevonden...</div>;
+    if (!user) return <div className="text-black p-4">Gebruiker niet gevonden...</div>;
 
     return (
         <div className="relative bg-background min-h-screen p-8">
-            <SterrenBG />
+            {/*<SterrenBG />*/}
             <div className="relative z-10 w-3/5 bg-white mx-auto p-4 rounded-lg">
                 <h1 className="text-black text-2xl flex gap-4 font-bold mb-4">
                     <a href="/overview">
