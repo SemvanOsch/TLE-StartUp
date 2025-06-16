@@ -22,41 +22,37 @@ const levels = [
         name: "Plusopia",
         color: "#d95b19",
         planets: ["#ea4cc4", "#3fdc87", "#78c6f0"],
-        flag: "➕",
         leftArrow: plusopiaL,
         rightArrow: plusopiaR,
         planetImg: plusopiaa,
-        path: "/multiplication"  // Only Plusopia has special path
+        path: "/multiplication"
     },
     {
         name: "Minaria",
         color: "#4094d6",
         planets: ["#f18a21", "#ea4cc4", "#3fdc87"],
-        flag: "➖",
         leftArrow: minariaL,
         rightArrow: minariaR,
         planetImg: minariaa,
-        path: "/"  // Others go to home
+        path: "/"
     },
     {
         name: "X-tropilos",
         color: "#6abd45",
         planets: ["#78c6f0", "#f18a21", "#ea4cc4"],
-        flag: "🗙",
         leftArrow: xtropilosL,
         rightArrow: xtropilosR,
         planetImg: xtropiloss,
-        path: "/"  // Others go to home
+        path: "/"
     },
     {
         name: "Halverra",
         color: "#ea4cc4",
         planets: ["#6abd45", "#78c6f0", "#f18a21"],
-        flag: ":",
         leftArrow: halverraL,
         rightArrow: halverraR,
         planetImg: halverraa,
-        path: "/"  // Others go to home
+        path: "/"
     },
 ];
 
