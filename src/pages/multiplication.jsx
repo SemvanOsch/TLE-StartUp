@@ -132,7 +132,7 @@ function Multiplication() {
                 className="absolute flex flex-col justify-center z-50">
                 <img src="/images/rocket.png" className="w-80 h-40" alt="Rocket"></img>
             </motion.div>
-            <section className="flex justify-center">
+            <section className="fixed bottom-10 flex justify-center w-full">
                 <div className="w-[70%] pt-10">
                     <progress
                         className="-skew-x-12 bg-offwhite rounded-xl h-10 w-full"
@@ -163,42 +163,42 @@ function Multiplication() {
                     <p className="text-5xl">{question}/{questionCount}</p>
                 </div>
             </section>
-            <section>
+            <section className="fixed top-40 w-full">
                 <div>
                     <form className="relative flex flex-col pt-10">
                         <motion.button
                             id="1"
                             onClick={handleAnswerButton}
                             whileTap={{scale: 0.9}}
-                            className="ml-[70%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                            <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button1Value}</p>
+                            className="ml-[70%] w-72 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button1Value}</p>
                         </motion.button>
                         <motion.button
                             id="2"
                             onClick={handleAnswerButton}
                             whileTap={{scale: 0.9}}
-                            className="ml-[50%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                            <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button2Value}</p>
+                            className="ml-[50%] w-72 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button2Value}</p>
                         </motion.button>
                         <motion.button
                             id="3"
                             onClick={handleAnswerButton}
                             whileTap={{scale: 0.9}}
-                            className="ml-[70%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                            <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button3Value}</p>
+                            className="ml-[70%] w-72 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button3Value}</p>
                         </motion.button>
                         <motion.button
                             id="4"
                             onClick={handleAnswerButton}
                             whileTap={{scale: 0.9}}
-                            className="ml-[50%] w-80 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
-                            <p className="text-7xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button4Value}</p>
+                            className="ml-[50%] w-72 h-32 bg-[url('./images/speedboost.png')] bg-cover bg-center">
+                            <p className="text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)]">{button4Value}</p>
                         </motion.button>
                         )
                     </form>
                 </div>
             </section>
-            <section className="flex justify-center pt-10">
+            <section className="fixed top-5 left-1/2 transform -translate-x-1/2 pt-10 text-center">
                 <h2
                     className={`text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)] ${
                         isCorrect ? 'text-green-500' : isIncorrect ? 'text-red-500' : 'text-text'}`}>
