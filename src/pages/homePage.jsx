@@ -20,6 +20,7 @@ const HomePage = () => {
                 const user = await response.json()
                 setUser(user)
                 console.log('ingelogd', user)
+                setLoading(false);
             }else{
                 window.location.href = '/login'
             }
@@ -36,6 +37,7 @@ const HomePage = () => {
     const location = useLocation();
     const [fadeIn, setFadeIn] = useState(false);
     const [showEntryRocket, setShowEntryRocket] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (location.state?.fromLevel) {
@@ -62,7 +64,7 @@ const HomePage = () => {
             navigate("/levels");
         }, 5000); // wacht tot animatie voorbij is
     };
-
+    if (loading) return null
     return (
         <div className="relative min-h-screen overflow-hidden">
             <SterrenBG versneld={startLaunch} />

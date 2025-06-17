@@ -39,6 +39,9 @@ function Multiplication() {
 
     const [showFadeIn, setShowFadeIn] = useState(true);
 
+    const [loading, setLoading] = useState(true);
+
+
     useEffect(() => {
         const timeout = setTimeout(() => setShowFadeIn(false), 1000); // 1s fade
         return () => clearTimeout(timeout);
@@ -58,6 +61,7 @@ function Multiplication() {
                 const user = await response.json();
                 setUser(user);
                 console.log('ingelogd', user);
+                setLoading(false);
             } else {
                 window.location.href = '/login';
             }
@@ -177,7 +181,7 @@ function Multiplication() {
         const visibility = hiddenButtons.includes(id.toString()) ? "invisible" : "";
         return `${positionMap[id.toString()]} ${base} ${visibility}`;
     };
-
+    if (loading) return null
     return (
         <main className="bg-background">
             <SterrenBG_Game versnelling={speedMult} />

@@ -122,7 +122,6 @@ const LevelSelector = () => {
             setTimeout(() => navigate(levels[index].path), 2000);
         }
     };
-
     return (
         <motion.div
             className="relative h-screen bg-black text-white overflow-hidden"

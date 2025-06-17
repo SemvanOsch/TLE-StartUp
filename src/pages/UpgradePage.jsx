@@ -46,6 +46,7 @@ const UpgradePage = () => {
                 const user = await response.json()
                 setMoney(user.coins)
                 setUpgradedStage(user.upgradeStage)
+                setLoading(false);
                 console.log('ingelogd', user)
             }else{
                 window.location.href = '/login'
@@ -125,6 +126,8 @@ const UpgradePage = () => {
     const [upgradedStage, setUpgradedStage] = useState(1)
     const [background, setBackground] = useState(background1)
     const [fadeOverlayVisible, setFadeOverlayVisible] = useState(true);
+    const [loading, setLoading] = useState(true);
+
 
     let blackCatImage = document.getElementById('blackCat')
     let spaceshipWindowImage = document.getElementById('spaceshipWindow')
@@ -287,6 +290,7 @@ const UpgradePage = () => {
         setCurrentButton(money >= 14 ? upgradeButton20 : upgradeButton20disabled);
     }, [money]);
 
+    if (loading) return null
     return(
         <div className="relative min-h-screen bg-background text-text flex flex-col items-center justify-center overflow-hidden">
             {/* Fade-in white overlay */}
