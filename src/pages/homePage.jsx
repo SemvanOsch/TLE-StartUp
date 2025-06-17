@@ -146,7 +146,6 @@ const HomePage = () => {
                         />
                     </div>
                 </div>
-                )}
             </main>
             {fadeIn && (
                 <motion.div
