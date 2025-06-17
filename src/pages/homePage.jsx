@@ -103,15 +103,15 @@ const HomePage = () => {
 
                     {/* Administratie knop */}
                     {user && user.role !== 0 && (
-                        <div className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[240px]">
-                            <div className="absolute top-1 left-1 bg-RaketBlueBtn skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
-                            <button className="relative bg-RaketGreenBtn skew-x-[-12deg] rounded px-12 py-6 text-lg font-bold text-black z-10 w-full"
-                                    onClick={() => navigate('/overview')}
-                            >
-                                <span className="skew-x-[12deg] text-2xl block">Administratie</span>
-                            </button>
-                        </div>
-                    )}
+                    <div className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[240px]">
+                        <div className="absolute top-1 left-1 bg-RaketBlueBtn skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
+                        <button className="relative bg-RaketGreenBtn skew-x-[-12deg] rounded px-12 py-6 text-lg font-bold text-black z-10 w-full"
+                                onClick={() => navigate('/overview')}
+                        >
+                            <span className="skew-x-[12deg] text-2xl block">Administratie</span>
+                        </button>
+                    </div>
+                        )}
                 </div>
                 <div
                     className={`absolute top-1/3 right-[275px] transform transition-transform ease-in-out ${

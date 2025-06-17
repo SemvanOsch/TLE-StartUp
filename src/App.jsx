@@ -9,7 +9,6 @@ import UpgradePage from "/src/pages/UpgradePage.jsx"
 import LoginPage from "./pages/LoginPage.jsx";
 
 import LevelSelector from "./pages/LevelSelector.jsx";
-import PlusSums from "./pages/plusSums.jsx";
 
 const router = createBrowserRouter([
     {
@@ -45,10 +44,6 @@ const router = createBrowserRouter([
             {
                 path: '/login',
                 element: <LoginPage/>
-            },
-            {
-                path: '/plussums',
-                element: <PlusSums/>,
             }
         ]
     }
