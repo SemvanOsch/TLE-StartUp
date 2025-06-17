@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from "framer-motion";
 import SterrenBG from "../component/sterrenBG.jsx";
+import { useNavigate } from "react-router-dom";
 
 function generateSum() {
     const a = Math.floor(Math.random() * 500);
@@ -12,12 +14,19 @@ function PlusSums() {
     const [input, setInput] = useState('');
     const [score, setScore] = useState(0);
     const [meteors, setMeteors] = useState([]);
-    const [timeLeft, setTimeLeft] = useState(60);
+    const [timeLeft, setTimeLeft] = useState(5);
     const [gameOver, setGameOver] = useState(false);
     const [scoreIndicators, setScoreIndicators] = useState([]);
+    const [showFadeIn, setShowFadeIn] = useState(true);
+    const [isLeaving, setIsLeaving] = useState(false);
 
     const rocketPosition = { x: 50, y: 95 };
     const speed = 0.15;
+
+    useEffect(() => {
+        const timeout = setTimeout(() => setShowFadeIn(false), 1000);
+        return () => clearTimeout(timeout);
+    }, []);
 
     useEffect(() => {
         if (gameOver) return;
@@ -101,7 +110,12 @@ function PlusSums() {
     };
 
     const handleBackToHome = () => {
-        window.location.href = '/';
+        setIsLeaving(true);
+        setGameOver(false); // reset gameOver
+
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 2300); // wacht op raket animatie
     };
 
     return (
@@ -126,7 +140,7 @@ function PlusSums() {
                 Munten: {score}
             </div>
 
-            {/* Input boven raket */}
+            {/* Input */}
             <form
                 onSubmit={handleSubmit}
                 className="absolute flex items-center gap-2"
@@ -190,24 +204,27 @@ function PlusSums() {
                 </div>
             ))}
 
-            {/* Raket */}
-            <img
-                src="/rocket.png"
+            {/* Raket met animatie */}
+            <motion.img
+                src="/testRaket.png"
                 alt="Raket"
                 className="absolute"
                 style={{
                     left: '50%',
                     top: 'calc(100% - 200px)',
                     transform: 'translate(-50%, 0)',
-                    width: '500px',
+                    width: '280px',
                     height: '350px',
                     pointerEvents: 'none',
                     zIndex: 30,
                 }}
+                initial={{x: '-50%'}}
+                animate={isLeaving ? { y: -2000} : {}}
+                transition={{ duration: 3, ease: "easeInOut" }}
             />
 
             {/* Game Over Overlay */}
-            {gameOver && (
+            {gameOver && !isLeaving && (
                 <div className="absolute inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center text-center p-4 z-50">
                     <h2 className="text-3xl font-bold mb-4">⏰ Tijd is op!</h2>
                     <p className="text-xl mb-6">Je eindscore: <strong>{score}</strong></p>
@@ -218,6 +235,25 @@ function PlusSums() {
                         Terug naar Home
                     </button>
                 </div>
+            )}
+
+            {/* Fade-in overlay bij laden */}
+            {showFadeIn && (
+                <motion.div
+                    className="fixed inset-0 bg-background z-50"
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: 0 }}
+                    transition={{ duration: 1 }}
+                />
+            )}
+
+            {isLeaving && (
+                <motion.div
+                    className="fixed inset-0 bg-background z-50"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1.2, delay: 1, ease: "easeInOut" }}
+                />
             )}
         </main>
     );

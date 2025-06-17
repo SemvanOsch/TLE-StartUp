@@ -37,6 +37,13 @@ function Multiplication() {
     const [incorrectButtonId, setIncorrectButtonId] = useState(null);
     const [hiddenButtons, setHiddenButtons] = useState([]);
 
+    const [showFadeIn, setShowFadeIn] = useState(true);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => setShowFadeIn(false), 1000); // 1s fade
+        return () => clearTimeout(timeout);
+    }, []);
+
     useEffect(() => {
         async function fetchUser() {
             const token = localStorage.getItem('token');
@@ -178,8 +185,20 @@ function Multiplication() {
             <motion.div
                 animate={{ x, y, rotate }}
                 transition={{ ease: "easeOut", duration: 1 }}
-                className="absolute flex flex-col justify-center z-40">
-                <img src="/images/rocket.png" className="w-80 h-40" alt="Rocket" />
+                className="absolute flex flex-col justify-center z-40 w-80 h-40"
+            >
+                <div className="relative w-full h-full">
+                    <img
+                        src="/testRaketRotated.png"
+                        className="w-full h-full relative z-10"
+                        alt="Rocket"
+                    />
+                    <img
+                        src="/flame.gif"
+                        alt="Flame"
+                        className="w-14 absolute left-1/2 -translate-x-40 top-full -mt-32 -rotate-90 z-0"
+                    />
+                </div>
             </motion.div>
 
             <section className="fixed bottom-10 flex justify-center w-full">
@@ -259,6 +278,16 @@ function Multiplication() {
                     </div>
                 </section>
             )}
+
+            {showFadeIn && (
+                <motion.div
+                    className="fixed inset-0 bg-background z-50"
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: 0 }}
+                    transition={{ duration: 2 }}
+                />
+            )}
+
         </main>
     );
 }
