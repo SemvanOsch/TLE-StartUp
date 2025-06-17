@@ -113,17 +113,25 @@ const HomePage = () => {
                     </div>
                         )}
                 </div>
-
-                {/* Raket afbeelding */}
-                <img
-                    src="testRaket.png"
-                    alt="Raket"
-                    className={`absolute top-1/3 right-[275px] transform w-80 h-auto transition-transform ease-in-out ${
-                        moveRocket
-                            ? "duration-[2500ms] -translate-y-[800px]"
-                            : "duration-[0ms] -translate-y-1/2"
+                <div
+                    className={`absolute top-1/3 right-[275px] transform transition-transform ease-in-out ${
+                        moveRocket ? "duration-[2500ms] -translate-y-[800px]" : "duration-[0ms] -translate-y-1/2"
                     }`}
-                />
+                >
+                    <div className="relative w-80 h-auto">
+                        <img
+                            src="/testRaket.png"
+                            alt="Raket"
+                            className="w-80 h-auto relative z-10"
+                        />
+                        <img
+                            src="/flame.gif"
+                            alt="Flame"
+                            className="w-20 h-auto absolute left-1/2 -translate-x-1/2 top-full -mt-32 rotate-180 z-0"
+                        />
+                    </div>
+                </div>
+
             </main>
         </div>
     );
