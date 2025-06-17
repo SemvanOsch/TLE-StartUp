@@ -22,6 +22,7 @@ function PlusSums() {
 
     const rocketPosition = { x: 50, y: 95 };
     const speed = 0.15;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const timeout = setTimeout(() => setShowFadeIn(false), 1000);
@@ -114,8 +115,8 @@ function PlusSums() {
         setGameOver(false); // reset gameOver
 
         setTimeout(() => {
-            window.location.href = '/';
-        }, 2300); // wacht op raket animatie
+            navigate("/", { state: { fromLevel: true } });
+        }, 2300);
     };
 
     return (

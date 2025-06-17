@@ -60,6 +60,7 @@ const LevelSelector = () => {
     const [launching, setLaunching] = useState(false);
     const [zoomTarget, setZoomTarget] = useState({ x: 0.5, y: 0.5 });
     const [showFade, setShowFade] = useState(false);
+    const [initialZoomOut, setInitialZoomOut] = useState(false);
     const planetRef = useRef(null);
     const navigate = useNavigate();
 
@@ -125,9 +126,9 @@ const LevelSelector = () => {
     return (
         <motion.div
             className="relative h-screen bg-black text-white overflow-hidden"
-            initial={{ scale: 1, originX: 0.5, originY: 0.5 }}
+            initial={{ scale: 2, originX: 0.5, originY: 0.5 }}
             animate={{
-                scale: launching ? 2 : 1,
+                scale: launching ? 2 : (initialZoomOut ? 2 : 1),
                 originX: zoomTarget.x,
                 originY: zoomTarget.y,
             }}

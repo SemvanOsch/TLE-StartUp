@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
 import SterrenBG from "../component/sterrenBG.jsx";
+import { useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+
 
 const HomePage = () => {
     useEffect(() => {
@@ -30,6 +33,18 @@ const HomePage = () => {
     const [startLaunch, setStartLaunch] = useState(false);
     const [moveRocket, setMoveRocket] = useState(false);
     const [user, setUser] = useState()
+    const location = useLocation();
+    const [fadeIn, setFadeIn] = useState(false);
+    const [showEntryRocket, setShowEntryRocket] = useState(false);
+
+    useEffect(() => {
+        if (location.state?.fromLevel) {
+            setFadeIn(true);
+            const timeout = setTimeout(() => setFadeIn(false), 1000);
+            return () => clearTimeout(timeout);
+        }
+    }, [location.state]);
+
     const handleRocketClick = () => {
         setStartTransition(true);
         setTimeout(() => {
@@ -131,8 +146,16 @@ const HomePage = () => {
                         />
                     </div>
                 </div>
-
+                )}
             </main>
+            {fadeIn && (
+                <motion.div
+                    className="fixed inset-0 bg-background z-50 pointer-events-none"
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: 0 }}
+                    transition={{ duration: 1 }}
+                />
+            )}
         </div>
     );
 };
