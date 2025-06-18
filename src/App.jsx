@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import {createBrowserRouter, RouterProvider} from "react-router";
-import HomePage from "./pages/HomePage.jsx";
+import HomePage from "./pages/homePage.jsx";
 import StudentOverview from "./pages/StudentOverview.jsx";
 import Student from "./pages/StudentDetails.jsx";
 import CreateStudent from "./pages/CreateStudent.jsx";
