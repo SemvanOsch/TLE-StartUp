@@ -171,7 +171,7 @@ function Multiplication() {
     }
 
     const getButtonClass = (id) => {
-        const base = "w-[23vh] h-[12vh] bg-[url('./images/speedboost.png')] bg-cover bg-center";
+        const base = "w-[23vh] h-[12vh] bg-[url('/images/speedboost.png')] bg-cover bg-center";
         const positionMap = {
             "1": "ml-[70%]",
             "2": "ml-[50%]",
