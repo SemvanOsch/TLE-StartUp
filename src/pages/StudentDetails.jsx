@@ -17,6 +17,7 @@ function Student() {
                 const user = await response.json()
                 if (user.role === 1) {
                     console.log('ingelogd', user)
+                    setLoading(false);
                 } else {
                     window.location.href = '/'
                 }
@@ -32,6 +33,7 @@ function Student() {
     const { id } = useParams();
     const [user, setUser] = useState(null);
     const [scores, setScores] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
@@ -60,7 +62,7 @@ function Student() {
     }, [id]);
 
     if (!user) return <div className="text-black p-4">Gebruiker niet gevonden...</div>;
-
+    if (loading) return null
     return (
         <div className="relative bg-background min-h-screen p-8">
             {/*<SterrenBG />*/}

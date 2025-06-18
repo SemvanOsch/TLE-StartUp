@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {useNavigate} from "react-router-dom";
 
 function CreateStudent(){
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchUser(){
@@ -17,6 +18,7 @@ function CreateStudent(){
                 const user = await response.json()
                 if (user.role === 1) {
                     console.log('ingelogd', user)
+                    setLoading(false);
                 } else {
                     window.location.href = '/'
                 }
@@ -67,7 +69,7 @@ function CreateStudent(){
         await postUser(formData);
         navigate(`/overview`);
     };
-
+    if (loading) return null
     return (
         <form onSubmit={handleSubmit} className="max-w-md mx-auto bg-white shadow-lg rounded-2xl p-6 space-y-6 mt-8">
             <div className={"flex flex-row-reverse justify-end gap-12"}>
