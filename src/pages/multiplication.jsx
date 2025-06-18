@@ -46,29 +46,29 @@ function Multiplication() {
         const timeout = setTimeout(() => setShowFadeIn(false), 1000); // 1s fade
         return () => clearTimeout(timeout);
     }, []);
-
-    useEffect(() => {
-        async function fetchUser() {
-            const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3001/api/game/me', {
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            if (response.ok) {
-                const user = await response.json();
-                setUser(user);
-                console.log('ingelogd', user);
-                setLoading(false);
-            } else {
-                window.location.href = '/login';
-            }
-        }
-
-        fetchUser();
-    }, []);
+    //
+    // useEffect(() => {
+    //     async function fetchUser() {
+    //         const token = localStorage.getItem('token');
+    //         const response = await fetch('http://localhost:3001/api/game/me', {
+    //             headers: {
+    //                 Accept: 'application/json',
+    //                 Authorization: `Bearer ${token}`
+    //             }
+    //         });
+    //
+    //         if (response.ok) {
+    //             const user = await response.json();
+    //             setUser(user);
+    //             console.log('ingelogd', user);
+    //             setLoading(false);
+    //         } else {
+    //             window.location.href = '/login';
+    //         }
+    //     }
+    //
+    //     fetchUser();
+    // }, []);
 
     useEffect(() => {
         const rightAnswerButton = Math.floor(Math.random() * 4);

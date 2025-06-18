@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from "react";
 const genereerSter = () => {
     const size = Math.random() * 2 + 1;
     return {
-        id: crypto.randomUUID(),
         x: Math.random() * 100,
         y: Math.random() * 100,
         size,
@@ -47,9 +46,9 @@ const SterrenBG_game = ({ aantalSterren = 100, versnelling = 1 }) => {
 
     return (
         <div className="absolute inset-0 z-0 bg-background overflow-hidden">
-            {sterren.map((ster) => (
+            {sterren.map((ster, index) => (
                 <div
-                    key={ster.id}
+                    key={index}
                     className="absolute rounded-full bg-white"
                     style={{
                         width: `${ster.size}px`,
