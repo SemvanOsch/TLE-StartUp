@@ -64,7 +64,7 @@ const HomePage = () => {
             navigate("/levels");
         }, 5000); // wacht tot animatie voorbij is
     };
-    if (loading) return null
+    // if (loading) return null
     return (
         <div className="relative min-h-screen overflow-hidden">
             <SterrenBG versneld={startLaunch} />

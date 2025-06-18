@@ -6,16 +6,16 @@ import alienImg from "../img/alien.png";
 import raketImg from "/testRaket.png";
 import halverraL from "../img/halverraL.png";
 import halverraR from "../img/halverraR.png"
-import halverraa from "/planeten/Halverra.png";
+import halverraa from "/planeten/Halverraa.png";
 import minariaL from "../img/minariaL.png";
 import minariaR from "../img/minariaR.png";
-import minariaa from "/planeten/Minaria.png";
+import minariaa from "/planeten/Minariaa.png";
 import plusopiaL from "../img/plusopiaL.png";
 import plusopiaR from "../img/plusopiaR.png";
-import plusopiaa from "/planeten/Plusopia.png";
+import plusopiaa from "/planeten/Plusopiaa.png";
 import xtropilosL from "../img/xtropilosL.png";
 import xtropilosR from "../img/xtropilosR.png";
-import xtropiloss from "/planeten/Xtropolis.png";
+import xtropiloss from "/planeten/Xtropoliss.png";
 
 const levels = [
     {
