@@ -1,14 +1,17 @@
 
 const API_BASE = import.meta.env.VITE_API_BASE;
+const API_URL = 'http://localhost:3001/api/game';
 
 
 // Helper to get token from localStorage
 const getToken = () => localStorage.getItem('token');
 const authHeaders = () => ({
   'Content-Type': 'application/json',
+  'Accept': 'application/json',
   Authorization: `Bearer ${getToken()}`,
 });
 
+//  user API
 export const registerUser = async (data) => {
   const res = await fetch(`${API_URL}/register`, {
     method: 'POST',
@@ -42,7 +45,14 @@ export const getUserById = async (id) => {
   });
   return res.json();
 };
-
+export const getAllUsers = async () => {
+  const res = await fetch(`${API_URL}/users`, {
+    method: 'GET',
+    headers: authHeaders(),
+  });
+  return res.json();
+};
+// coins API
 export const getUserCoins = async (id) => {
   const res = await fetch(`${API_URL}/user/${id}/coins`, {
     method: 'GET',
@@ -51,14 +61,21 @@ export const getUserCoins = async (id) => {
   return res.json();
 };
 
-export const getAllUsers = async () => {
-  const res = await fetch(`${API_URL}/users`, {
-    method: 'GET',
+export const updateCoins = async (amount) => {
+  const res = await fetch(`${API_URL}/user/update-coins`, {
+    method: 'POST',
     headers: authHeaders(),
+    body: JSON.stringify({ amount }),
   });
+
+  if (!res.ok) throw new Error("Failed to update coins");
+
   return res.json();
 };
 
+
+
+// scores API
 export const getUserScores = async (userId) => {
   const res = await fetch(`${API_URL}/scores/${userId}`, {
     method: 'GET',
@@ -75,7 +92,7 @@ export const saveScore = async (data) => {
   });
   return res.json();
 };
-
+// rewards API
 export const getRewards = async () => {
   const res = await fetch(`${API_URL}/rewards`, {
     method: 'GET',

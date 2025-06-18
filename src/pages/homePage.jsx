@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
 import SterrenBG from "../component/sterrenBG.jsx";
+import { getUserCoins } from "../api.js";
 
 const HomePage = () => {
     useEffect(() => {
@@ -30,6 +31,26 @@ const HomePage = () => {
     const [startLaunch, setStartLaunch] = useState(false);
     const [moveRocket, setMoveRocket] = useState(false);
     const [user, setUser] = useState()
+    const [coins, setCoins] = useState(0);
+
+    useEffect(() => {
+        const fetchCoins = async () => {
+            const userId = localStorage.getItem("userId");
+            if (userId) {
+                const result = await getUserCoins(userId);
+                console.log('Coin response:', result);
+
+                // Adjust this line based on your API response
+                const actualCoins = result.coins ?? result.user?.coins;
+
+                if (actualCoins !== undefined) {
+                    setCoins(actualCoins);
+                }
+            }
+        };
+        fetchCoins();
+    }, []);
+
     const handleRocketClick = () => {
         setStartTransition(true);
         setTimeout(() => {
@@ -69,6 +90,7 @@ const HomePage = () => {
                             : ""
                 }`}
             >
+
                 <h1 className="mt-16 ml-10 text-white text-7xl drop-shadow-[1px_1px_2px_black]">
                     Ruimte voor rekenen
                 </h1>
@@ -78,21 +100,30 @@ const HomePage = () => {
                     alt="Profiel"
                     className="absolute top-1 right-10 w-12 h-12 rounded-full shadow-lg"
                 />
+                <div
+                    className="absolute top-4 right-28 bg-yellow-300 text-black font-bold py-2 px-4 rounded-full shadow-lg text-lg z-20">
+                    🪙 {coins}
+                </div>
 
                 <div className="ml-20 mt-14 flex flex-col space-y-10">
                     {/* Lanceer knop */}
-                    <div className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[320px]">
-                        <div className="absolute top-1 left-1 bg-orange-500 skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
-                        <button className="relative bg-yellow-400 skew-x-[-12deg] rounded px-16 py-6 text-xl font-bold text-black z-10 w-full"
-                                onClick={handleLanceerClick}
+                    <div
+                        className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[320px]">
+                        <div
+                            className="absolute top-1 left-1 bg-orange-500 skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
+                        <button
+                            className="relative bg-yellow-400 skew-x-[-12deg] rounded px-16 py-6 text-xl font-bold text-black z-10 w-full"
+                            onClick={handleLanceerClick}
                         >
                             <span className="skew-x-[12deg] text-3xl block">Lanceer!</span>
                         </button>
                     </div>
 
                     {/* Raket knop met animatie */}
-                    <div className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[240px]">
-                        <div className="absolute top-1 left-1 bg-RaketRedBtn skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
+                    <div
+                        className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[240px]">
+                        <div
+                            className="absolute top-1 left-1 bg-RaketRedBtn skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
                         <button
                             onClick={handleRocketClick}
                             className="relative bg-RaketOrangeBtn skew-x-[-12deg] rounded px-12 py-6 text-lg font-bold text-black z-10 w-full"
@@ -103,15 +134,18 @@ const HomePage = () => {
 
                     {/* Administratie knop */}
                     {user && user.role !== 0 && (
-                    <div className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[240px]">
-                        <div className="absolute top-1 left-1 bg-RaketBlueBtn skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
-                        <button className="relative bg-RaketGreenBtn skew-x-[-12deg] rounded px-12 py-6 text-lg font-bold text-black z-10 w-full"
+                        <div
+                            className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[240px]">
+                            <div
+                                className="absolute top-1 left-1 bg-RaketBlueBtn skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
+                            <button
+                                className="relative bg-RaketGreenBtn skew-x-[-12deg] rounded px-12 py-6 text-lg font-bold text-black z-10 w-full"
                                 onClick={() => navigate('/overview')}
-                        >
-                            <span className="skew-x-[12deg] text-2xl block">Administratie</span>
-                        </button>
-                    </div>
-                        )}
+                            >
+                                <span className="skew-x-[12deg] text-2xl block">Administratie</span>
+                            </button>
+                        </div>
+                    )}
                 </div>
                 <div
                     className={`absolute top-1/3 right-[275px] transform transition-transform ease-in-out ${

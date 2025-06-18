@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router";
 import { motion } from "motion/react";
 import SterrenBG_Game from "../component/sterrenBG_game.jsx";
+import {updateCoins} from "../api.js";
 
 function Multiplication() {
     const navigate = useNavigate();
@@ -36,6 +37,8 @@ function Multiplication() {
 
     const [incorrectButtonId, setIncorrectButtonId] = useState(null);
     const [hiddenButtons, setHiddenButtons] = useState([]);
+
+
 
     useEffect(() => {
         async function fetchUser() {
@@ -157,7 +160,33 @@ function Multiplication() {
         setIsEndPopup(true);
         setIsRunning(false);
         setFinalTime(time);
+
+        const earnedCoins = correctAmmount;
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:3001/api/game/me/coins', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ amount: earnedCoins })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log(`✅ Added ${earnedCoins} coins. Total now: ${data.coins}`);
+            } else {
+                console.log('❌ Error adding coins');
+            }
+        } catch (err) {
+            console.error('❌ Exception updating coins:', err);
+        }
     }
+
+
 
     const getButtonClass = (id) => {
         const base = "w-[23vh] h-[12vh] bg-[url('./images/speedboost.png')] bg-cover bg-center";
