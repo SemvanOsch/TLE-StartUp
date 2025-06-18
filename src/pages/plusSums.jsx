@@ -14,7 +14,7 @@ function PlusSums() {
     const [input, setInput] = useState('');
     const [score, setScore] = useState(0);
     const [meteors, setMeteors] = useState([]);
-    const [timeLeft, setTimeLeft] = useState(5);
+    const [timeLeft, setTimeLeft] = useState(60);
     const [gameOver, setGameOver] = useState(false);
     const [scoreIndicators, setScoreIndicators] = useState([]);
     const [showFadeIn, setShowFadeIn] = useState(true);

@@ -119,10 +119,6 @@ function Multiplication() {
         const id = event.currentTarget.getAttribute("id");
         const value = parseInt(event.currentTarget.querySelector("p").textContent);
 
-        if (question === questionCount - 1) {
-            endLesson();
-        }
-
         if (value === (number1 * number2)) {
             setX(event.currentTarget.offsetLeft - 80);
             setY(event.currentTarget.offsetTop + 100);
@@ -130,14 +126,19 @@ function Multiplication() {
             setSpeedMult(8);
 
             setTimeout(() => {
-                setX(200);
-                setY(visualViewport.height / 2 - 100);
+
                 setIsCorrect(false);
                 handleSpeed();
 
                 setCorrectAmmount(prev => prev + 1);
                 setQuestion(prev => prev + 1);
-                newQuestion();
+                if (question === questionCount - 1) {
+                    endLesson();
+                } else {
+                    setX(200);
+                    setY(visualViewport.height / 2 - 100);
+                    newQuestion();
+                }
             }, 1500);
         } else {
             setHiddenButtons([...hiddenButtons, id]); // verberg alleen fout aangeklikte knop
@@ -181,7 +182,7 @@ function Multiplication() {
         const visibility = hiddenButtons.includes(id.toString()) ? "invisible" : "";
         return `${positionMap[id.toString()]} ${base} ${visibility}`;
     };
-    if (loading) return null
+    // if (loading) return null
     return (
         <main className="bg-background">
             <SterrenBG_Game versnelling={speedMult} />

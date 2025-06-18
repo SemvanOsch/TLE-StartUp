@@ -91,7 +91,7 @@ const HomePage = () => {
                 </h1>
 
                 <img
-                    src="Profile.png"
+                    src="/Profile.png"
                     alt="Profiel"
                     className="absolute top-1 right-10 w-12 h-12 rounded-full shadow-lg"
                 />
