@@ -181,7 +181,7 @@ function Multiplication() {
         const visibility = hiddenButtons.includes(id.toString()) ? "invisible" : "";
         return `${positionMap[id.toString()]} ${base} ${visibility}`;
     };
-    if (loading) return null
+    // if (loading) return null
     return (
         <main className="bg-background">
             <SterrenBG_Game versnelling={speedMult} />
