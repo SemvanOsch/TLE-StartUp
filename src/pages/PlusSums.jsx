@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import SterrenBG from "../component/sterrenBG.jsx";
+import SterrenBG from "../component/SterrenBG.jsx";
 import { useNavigate } from "react-router-dom";
 
 function generateSum() {

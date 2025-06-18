@@ -12,7 +12,7 @@ const genereerSter = () => {
     };
 };
 
-const SterrenBG_Game = ({ aantalSterren = 100, versnelling = 1 }) => {
+const SterrenBG_game = ({ aantalSterren = 100, versnelling = 1 }) => {
     const [sterren, setSterren] = useState([]);
     const sterrenRef = useRef([]);
 
@@ -65,4 +65,4 @@ const SterrenBG_Game = ({ aantalSterren = 100, versnelling = 1 }) => {
     );
 };
 
-export default SterrenBG_Game;
+export default SterrenBG_game;

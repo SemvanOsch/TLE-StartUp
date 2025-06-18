@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
-import SterrenBG from "../component/sterrenBG.jsx";
+import SterrenBG from "../component/SterrenBG.jsx";
 import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 

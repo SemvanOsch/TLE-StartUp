@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router";
 import { motion } from "motion/react";
-import SterrenBG_Game from "../component/sterrenBG_game.jsx";
+import SterrenBG_game from "../component/SterrenBG_game.jsx";
 
 function Multiplication() {
     const navigate = useNavigate();
@@ -184,7 +184,7 @@ function Multiplication() {
     // if (loading) return null
     return (
         <main className="bg-background">
-            <SterrenBG_Game versnelling={speedMult} />
+            <SterrenBG_game versnelling={speedMult} />
 
             <motion.div
                 animate={{ x, y, rotate }}
