@@ -67,7 +67,7 @@ const HomePage = () => {
     // if (loading) return null
     return (
         <div className="relative min-h-screen overflow-hidden">
-            <SterrenBG versneld={startLaunch} />
+            {/*<SterrenBG versneld={startLaunch} />*/}
 
             {/* Witte fade overlay */}
             <div
