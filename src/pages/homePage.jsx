@@ -1,6 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
 import SterrenBG from "../component/sterrenBG.jsx";
+import { useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+
 
 const HomePage = () => {
     useEffect(() => {
@@ -17,6 +20,7 @@ const HomePage = () => {
                 const user = await response.json()
                 setUser(user)
                 console.log('ingelogd', user)
+                setLoading(false);
             }else{
                 window.location.href = '/login'
             }
@@ -30,6 +34,19 @@ const HomePage = () => {
     const [startLaunch, setStartLaunch] = useState(false);
     const [moveRocket, setMoveRocket] = useState(false);
     const [user, setUser] = useState()
+    const location = useLocation();
+    const [fadeIn, setFadeIn] = useState(false);
+    const [showEntryRocket, setShowEntryRocket] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (location.state?.fromLevel) {
+            setFadeIn(true);
+            const timeout = setTimeout(() => setFadeIn(false), 1000);
+            return () => clearTimeout(timeout);
+        }
+    }, [location.state]);
+
     const handleRocketClick = () => {
         setStartTransition(true);
         setTimeout(() => {
@@ -47,7 +64,7 @@ const HomePage = () => {
             navigate("/levels");
         }, 5000); // wacht tot animatie voorbij is
     };
-
+    if (loading) return null
     return (
         <div className="relative min-h-screen overflow-hidden">
             <SterrenBG versneld={startLaunch} />
@@ -113,18 +130,33 @@ const HomePage = () => {
                     </div>
                         )}
                 </div>
-
-                {/* Raket afbeelding */}
-                <img
-                    src="testRaket.png"
-                    alt="Raket"
-                    className={`absolute top-1/3 right-[275px] transform w-80 h-auto transition-transform ease-in-out ${
-                        moveRocket
-                            ? "duration-[2500ms] -translate-y-[800px]"
-                            : "duration-[0ms] -translate-y-1/2"
+                <div
+                    className={`absolute top-1/3 right-[275px] transform transition-transform ease-in-out ${
+                        moveRocket ? "duration-[2500ms] -translate-y-[800px]" : "duration-[0ms] -translate-y-1/2"
                     }`}
-                />
+                >
+                    <div className="relative w-80 h-auto">
+                        <img
+                            src="/testRaket.png"
+                            alt="Raket"
+                            className="w-80 h-auto relative z-10"
+                        />
+                        <img
+                            src="/flame.gif"
+                            alt="Flame"
+                            className="w-20 h-auto absolute left-1/2 -translate-x-1/2 top-full -mt-32 rotate-180 z-0"
+                        />
+                    </div>
+                </div>
             </main>
+            {fadeIn && (
+                <motion.div
+                    className="fixed inset-0 bg-background z-50 pointer-events-none"
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: 0 }}
+                    transition={{ duration: 1 }}
+                />
+            )}
         </div>
     );
 };
