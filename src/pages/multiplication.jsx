@@ -4,31 +4,9 @@ import { motion } from "motion/react";
 import SterrenBG_Game from "../component/sterrenBG_game.jsx";
 
 function Multiplication() {
-
-    useEffect(() => {
-        async function fetchUser(){
-            const token = localStorage.getItem('token')
-            const response = await fetch('http://localhost:3001/api/game/me',{
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            })
-
-            if(response.ok){
-                const user = await response.json()
-                setUser(user)
-                console.log('ingelogd', user)
-            }else{
-                window.location.href = '/login'
-            }
-        }
-
-        fetchUser()
-    }, []);
-
     const navigate = useNavigate();
 
+    const [user, setUser] = useState(null);
     const [isEndPopup, setIsEndPopup] = useState(false);
 
     const [button1Value, setButton1Value] = useState("0");
@@ -60,6 +38,28 @@ function Multiplication() {
     const [hiddenButtons, setHiddenButtons] = useState([]);
 
     useEffect(() => {
+        async function fetchUser() {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:3001/api/game/me', {
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                setUser(user);
+                console.log('ingelogd', user);
+            } else {
+                window.location.href = '/login';
+            }
+        }
+
+        fetchUser();
+    }, []);
+
+    useEffect(() => {
         const rightAnswerButton = Math.floor(Math.random() * 4);
         setButton1Value(rightAnswerButton === 0 ? answer : Math.floor(Math.random() * 100));
         setButton2Value(rightAnswerButton === 1 ? answer : Math.floor(Math.random() * 100));
@@ -81,7 +81,7 @@ function Multiplication() {
         const newAnswer = newNumber1 * newNumber2;
         const rightAnswerButton = Math.floor(Math.random() * 4);
 
-        setHiddenButtons([]); // reset buttons
+        setHiddenButtons([]); // reset knoppen zichtbaar
 
         setButton1Value(rightAnswerButton === 0 ? newAnswer : Math.floor(Math.random() * 100));
         setButton2Value(rightAnswerButton === 1 ? newAnswer : Math.floor(Math.random() * 100));
@@ -91,7 +91,6 @@ function Multiplication() {
         setNumber1(newNumber1);
         setNumber2(newNumber2);
         setAnswer(newAnswer);
-
         setIsRunning(true);
     }
 
@@ -106,7 +105,6 @@ function Multiplication() {
 
     function handleAnswerButton(event) {
         event.preventDefault();
-
         const id = event.currentTarget.getAttribute("id");
         const value = parseInt(event.currentTarget.querySelector("p").textContent);
 
@@ -131,8 +129,7 @@ function Multiplication() {
                 newQuestion();
             }, 1500);
         } else {
-            const correctId = findCorrectButtonId();
-            setHiddenButtons([...hiddenButtons, id]);
+            setHiddenButtons([...hiddenButtons, id]); // verberg alleen fout aangeklikte knop
             setIsIncorrect(true);
             setIncorrectButtonId(id);
             setRotate(prev => prev - 360);
@@ -163,14 +160,21 @@ function Multiplication() {
     }
 
     const getButtonClass = (id) => {
-        return `ml-[${id % 2 === 1 ? '70' : '50'}%] w-[23vh] h-[12vh] 
-                bg-[url('./images/speedboost.png')] bg-cover bg-center 
-                ${hiddenButtons.includes(id.toString()) ? 'invisible' : ''}`;
+        const base = "w-[23vh] h-[12vh] bg-[url('./images/speedboost.png')] bg-cover bg-center";
+        const positionMap = {
+            "1": "ml-[70%]",
+            "2": "ml-[50%]",
+            "3": "ml-[70%]",
+            "4": "ml-[50%]",
+        };
+        const visibility = hiddenButtons.includes(id.toString()) ? "invisible" : "";
+        return `${positionMap[id.toString()]} ${base} ${visibility}`;
     };
 
     return (
         <main className="bg-background">
             <SterrenBG_Game versnelling={speedMult} />
+
             <motion.div
                 animate={{ x, y, rotate }}
                 transition={{ ease: "easeOut", duration: 1 }}
