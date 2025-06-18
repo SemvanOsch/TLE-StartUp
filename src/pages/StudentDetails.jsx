@@ -3,9 +3,37 @@ import { useParams } from "react-router-dom";
 import SterrenBG from "../component/SterrenBG.jsx";
 
 function Student() {
+    useEffect(() => {
+        async function fetchUser(){
+            const token = localStorage.getItem('token')
+            const response = await fetch('http://localhost:3001/api/game/me',{
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if (response.ok) {
+                const user = await response.json()
+                if (user.role === 1) {
+                    console.log('ingelogd', user)
+                    setLoading(false);
+                } else {
+                    window.location.href = '/'
+                }
+            } else {
+                window.location.href = '/login'
+            }
+        }
+
+
+        fetchUser()
+    }, []);
+
     const { id } = useParams();
     const [user, setUser] = useState(null);
     const [scores, setScores] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function fetchData() {
@@ -34,7 +62,7 @@ function Student() {
     }, [id]);
 
     if (!user) return <div className="text-black p-4">Gebruiker niet gevonden...</div>;
-
+    if (loading) return null
     return (
         <div className="relative bg-background min-h-screen p-8">
             {/*<SterrenBG />*/}

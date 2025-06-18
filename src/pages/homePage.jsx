@@ -1,12 +1,51 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import SterrenBG from "../component/sterrenBG.jsx";
+import { useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+
 
 const HomePage = () => {
+    useEffect(() => {
+        async function fetchUser(){
+            const token = localStorage.getItem('token')
+            const response = await fetch('http://localhost:3001/api/game/me',{
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if(response.ok){
+                const user = await response.json()
+                setUser(user)
+                console.log('ingelogd', user)
+                setLoading(false);
+            }else{
+                window.location.href = '/login'
+            }
+        }
+
+        fetchUser()
+    }, []);
+
     const navigate = useNavigate();
     const [startTransition, setStartTransition] = useState(false);
     const [startLaunch, setStartLaunch] = useState(false);
     const [moveRocket, setMoveRocket] = useState(false);
+    const [user, setUser] = useState()
+    const location = useLocation();
+    const [fadeIn, setFadeIn] = useState(false);
+    const [showEntryRocket, setShowEntryRocket] = useState(false);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        if (location.state?.fromLevel) {
+            setFadeIn(true);
+            const timeout = setTimeout(() => setFadeIn(false), 1000);
+            return () => clearTimeout(timeout);
+        }
+    }, [location.state]);
 
     const handleRocketClick = () => {
         setStartTransition(true);
@@ -25,7 +64,7 @@ const HomePage = () => {
             navigate("/levels");
         }, 5000); // wacht tot animatie voorbij is
     };
-
+    if (loading) return null
     return (
         <div className="relative min-h-screen overflow-hidden">
             <SterrenBG versneld={startLaunch} />
@@ -80,6 +119,7 @@ const HomePage = () => {
                     </div>
 
                     {/* Administratie knop */}
+                    {user && user.role !== 0 && (
                     <div className="relative inline-block transform transition-transform duration-300 hover:scale-110 w-[240px]">
                         <div className="absolute top-1 left-1 bg-RaketBlueBtn skew-x-[-12deg] rounded p-11 w-full h-full z-0"></div>
                         <button className="relative bg-RaketGreenBtn skew-x-[-12deg] rounded px-12 py-6 text-lg font-bold text-black z-10 w-full"
@@ -88,19 +128,35 @@ const HomePage = () => {
                             <span className="skew-x-[12deg] text-2xl block">Administratie</span>
                         </button>
                     </div>
+                        )}
                 </div>
-
-                {/* Raket afbeelding */}
-                <img
-                    src="testRaket.png"
-                    alt="Raket"
-                    className={`absolute top-1/3 right-[275px] transform w-80 h-auto transition-transform ease-in-out ${
-                        moveRocket
-                            ? "duration-[2500ms] -translate-y-[800px]"
-                            : "duration-[0ms] -translate-y-1/2"
+                <div
+                    className={`absolute top-1/3 right-[275px] transform transition-transform ease-in-out ${
+                        moveRocket ? "duration-[2500ms] -translate-y-[800px]" : "duration-[0ms] -translate-y-1/2"
                     }`}
-                />
+                >
+                    <div className="relative w-80 h-auto">
+                        <img
+                            src="/testRaket.png"
+                            alt="Raket"
+                            className="w-80 h-auto relative z-10"
+                        />
+                        <img
+                            src="/flame.gif"
+                            alt="Flame"
+                            className="w-20 h-auto absolute left-1/2 -translate-x-1/2 top-full -mt-32 rotate-180 z-0"
+                        />
+                    </div>
+                </div>
             </main>
+            {fadeIn && (
+                <motion.div
+                    className="fixed inset-0 bg-background z-50 pointer-events-none"
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: 0 }}
+                    transition={{ duration: 1 }}
+                />
+            )}
         </div>
     );
 };

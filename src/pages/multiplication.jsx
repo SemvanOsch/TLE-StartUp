@@ -6,6 +6,7 @@ import SterrenBG_Game from "../component/sterrenBG_game.jsx";
 function Multiplication() {
     const navigate = useNavigate();
 
+    const [user, setUser] = useState(null);
     const [isEndPopup, setIsEndPopup] = useState(false);
 
     const [button1Value, setButton1Value] = useState("0");
@@ -36,6 +37,39 @@ function Multiplication() {
     const [incorrectButtonId, setIncorrectButtonId] = useState(null);
     const [hiddenButtons, setHiddenButtons] = useState([]);
 
+    const [showFadeIn, setShowFadeIn] = useState(true);
+
+    const [loading, setLoading] = useState(true);
+
+
+    useEffect(() => {
+        const timeout = setTimeout(() => setShowFadeIn(false), 1000); // 1s fade
+        return () => clearTimeout(timeout);
+    }, []);
+
+    useEffect(() => {
+        async function fetchUser() {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:3001/api/game/me', {
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                setUser(user);
+                console.log('ingelogd', user);
+                setLoading(false);
+            } else {
+                window.location.href = '/login';
+            }
+        }
+
+        fetchUser();
+    }, []);
+
     useEffect(() => {
         const rightAnswerButton = Math.floor(Math.random() * 4);
         setButton1Value(rightAnswerButton === 0 ? answer : Math.floor(Math.random() * 100));
@@ -58,7 +92,7 @@ function Multiplication() {
         const newAnswer = newNumber1 * newNumber2;
         const rightAnswerButton = Math.floor(Math.random() * 4);
 
-        setHiddenButtons([]); // reset buttons
+        setHiddenButtons([]); // reset knoppen zichtbaar
 
         setButton1Value(rightAnswerButton === 0 ? newAnswer : Math.floor(Math.random() * 100));
         setButton2Value(rightAnswerButton === 1 ? newAnswer : Math.floor(Math.random() * 100));
@@ -68,7 +102,6 @@ function Multiplication() {
         setNumber1(newNumber1);
         setNumber2(newNumber2);
         setAnswer(newAnswer);
-
         setIsRunning(true);
     }
 
@@ -83,7 +116,6 @@ function Multiplication() {
 
     function handleAnswerButton(event) {
         event.preventDefault();
-
         const id = event.currentTarget.getAttribute("id");
         const value = parseInt(event.currentTarget.querySelector("p").textContent);
 
@@ -92,7 +124,7 @@ function Multiplication() {
         }
 
         if (value === (number1 * number2)) {
-            setX(event.currentTarget.offsetLeft);
+            setX(event.currentTarget.offsetLeft - 80);
             setY(event.currentTarget.offsetTop + 100);
             setIsCorrect(true);
             setSpeedMult(8);
@@ -108,8 +140,7 @@ function Multiplication() {
                 newQuestion();
             }, 1500);
         } else {
-            const correctId = findCorrectButtonId();
-            setHiddenButtons([...hiddenButtons, id]);
+            setHiddenButtons([...hiddenButtons, id]); // verberg alleen fout aangeklikte knop
             setIsIncorrect(true);
             setIncorrectButtonId(id);
             setRotate(prev => prev - 360);
@@ -140,19 +171,38 @@ function Multiplication() {
     }
 
     const getButtonClass = (id) => {
-        return `ml-[${id % 2 === 1 ? '70' : '50'}%] w-[23vh] h-[12vh] 
-                bg-[url('./images/speedboost.png')] bg-cover bg-center 
-                ${hiddenButtons.includes(id.toString()) ? 'invisible' : ''}`;
+        const base = "w-[23vh] h-[12vh] bg-[url('./images/speedboost.png')] bg-cover bg-center";
+        const positionMap = {
+            "1": "ml-[70%]",
+            "2": "ml-[50%]",
+            "3": "ml-[70%]",
+            "4": "ml-[50%]",
+        };
+        const visibility = hiddenButtons.includes(id.toString()) ? "invisible" : "";
+        return `${positionMap[id.toString()]} ${base} ${visibility}`;
     };
-
+    if (loading) return null
     return (
         <main className="bg-background">
             <SterrenBG_Game versnelling={speedMult} />
+
             <motion.div
                 animate={{ x, y, rotate }}
                 transition={{ ease: "easeOut", duration: 1 }}
-                className="absolute flex flex-col justify-center z-40">
-                <img src="/images/rocket.png" className="w-80 h-40" alt="Rocket" />
+                className="absolute flex flex-col justify-center z-40 w-80 h-40"
+            >
+                <div className="relative w-full h-full">
+                    <img
+                        src="/testRaketRotated.png"
+                        className="w-full h-full relative z-10"
+                        alt="Rocket"
+                    />
+                    <img
+                        src="/flame.gif"
+                        alt="Flame"
+                        className="w-14 absolute left-1/2 -translate-x-40 top-full -mt-32 -rotate-90 z-0"
+                    />
+                </div>
             </motion.div>
 
             <section className="fixed bottom-10 flex justify-center w-full">
@@ -232,6 +282,16 @@ function Multiplication() {
                     </div>
                 </section>
             )}
+
+            {showFadeIn && (
+                <motion.div
+                    className="fixed inset-0 bg-background z-50"
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: 0 }}
+                    transition={{ duration: 2 }}
+                />
+            )}
+
         </main>
     );
 }

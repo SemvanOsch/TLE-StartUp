@@ -21,7 +21,7 @@ const LoginPage = () => {
                 console.log('inhoud van localstorage', localStorage)
                 console.log('ingelogd')
                 setErrorMessage('')
-                window.location.href = '/home'
+                window.location.href = '/'
             } else {
                 setErrorMessage('Login mislukt. Check of je gegevens kloppen.');
             }
