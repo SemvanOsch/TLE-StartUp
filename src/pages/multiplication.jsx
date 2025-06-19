@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router";
 import { motion } from "motion/react";
 import SterrenBG_Game from "../component/sterrenBG_game.jsx";
-import {updateCoins} from "../api.js";
 
 function Multiplication() {
     const navigate = useNavigate();
@@ -38,6 +37,16 @@ function Multiplication() {
     const [incorrectButtonId, setIncorrectButtonId] = useState(null);
     const [hiddenButtons, setHiddenButtons] = useState([]);
 
+    const [showFadeIn, setShowFadeIn] = useState(true);
+
+    const [loading, setLoading] = useState(true);
+
+
+    useEffect(() => {
+        const timeout = setTimeout(() => setShowFadeIn(false), 1000); // 1s fade
+        return () => clearTimeout(timeout);
+    }, []);
+
 
 
     useEffect(() => {
@@ -54,6 +63,7 @@ function Multiplication() {
                 const user = await response.json();
                 setUser(user);
                 console.log('ingelogd', user);
+                setLoading(false);
             } else {
                 window.location.href = '/login';
             }
@@ -111,10 +121,6 @@ function Multiplication() {
         const id = event.currentTarget.getAttribute("id");
         const value = parseInt(event.currentTarget.querySelector("p").textContent);
 
-        if (question === questionCount - 1) {
-            endLesson();
-        }
-
         if (value === (number1 * number2)) {
             setX(event.currentTarget.offsetLeft - 80);
             setY(event.currentTarget.offsetTop + 100);
@@ -122,14 +128,19 @@ function Multiplication() {
             setSpeedMult(8);
 
             setTimeout(() => {
-                setX(200);
-                setY(visualViewport.height / 2 - 100);
+
                 setIsCorrect(false);
                 handleSpeed();
 
                 setCorrectAmmount(prev => prev + 1);
                 setQuestion(prev => prev + 1);
-                newQuestion();
+                if (question === questionCount - 1) {
+                    endLesson();
+                } else {
+                    setX(200);
+                    setY(visualViewport.height / 2 - 100);
+                    newQuestion();
+                }
             }, 1500);
         } else {
             setHiddenButtons([...hiddenButtons, id]); // verberg alleen fout aangeklikte knop
@@ -186,8 +197,6 @@ function Multiplication() {
         }
     }
 
-
-
     const getButtonClass = (id) => {
         const base = "w-[23vh] h-[12vh] bg-[url('./images/speedboost.png')] bg-cover bg-center";
         const positionMap = {
@@ -199,7 +208,7 @@ function Multiplication() {
         const visibility = hiddenButtons.includes(id.toString()) ? "invisible" : "";
         return `${positionMap[id.toString()]} ${base} ${visibility}`;
     };
-
+    // if (loading) return null
     return (
         <main className="bg-background">
             <SterrenBG_Game versnelling={speedMult} />
@@ -207,8 +216,20 @@ function Multiplication() {
             <motion.div
                 animate={{ x, y, rotate }}
                 transition={{ ease: "easeOut", duration: 1 }}
-                className="absolute flex flex-col justify-center z-40">
-                <img src="/images/rocket.png" className="w-80 h-40" alt="Rocket" />
+                className="absolute flex flex-col justify-center z-40 w-80 h-40"
+            >
+                <div className="relative w-full h-full">
+                    <img
+                        src="/testRaketRotated.png"
+                        className="w-full h-full relative z-10"
+                        alt="Rocket"
+                    />
+                    <img
+                        src="/flame.gif"
+                        alt="Flame"
+                        className="w-14 absolute left-1/2 -translate-x-40 top-full -mt-32 -rotate-90 z-0"
+                    />
+                </div>
             </motion.div>
 
             <section className="fixed bottom-10 flex justify-center w-full">
@@ -288,6 +309,16 @@ function Multiplication() {
                     </div>
                 </section>
             )}
+
+            {showFadeIn && (
+                <motion.div
+                    className="fixed inset-0 bg-background z-50"
+                    initial={{ opacity: 1 }}
+                    animate={{ opacity: 0 }}
+                    transition={{ duration: 2 }}
+                />
+            )}
+
         </main>
     );
 }

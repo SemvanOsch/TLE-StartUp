@@ -16,6 +16,7 @@ function StudentOverview(){
                 const user = await response.json()
                 if (user.role === 1) {
                     console.log('ingelogd', user)
+                    setLoading(false);
                 } else {
                     window.location.href = '/'
                 }
@@ -47,7 +48,8 @@ function StudentOverview(){
     useEffect(() => {
         fetchData()
     }, []);
-
+    const [loading, setLoading] = useState(true);
+    if (loading) return null
     return (
         <div className="relative bg-background min-h-screen p-8">
             {/*<SterrenBG/>*/}

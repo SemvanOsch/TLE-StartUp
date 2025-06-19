@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import {createBrowserRouter, RouterProvider} from "react-router";
-import HomePage from "./pages/HomePage.jsx";
+import HomePage from "./pages/homePage.jsx";
 import StudentOverview from "./pages/StudentOverview.jsx";
 import Student from "./pages/StudentDetails.jsx";
 import CreateStudent from "./pages/CreateStudent.jsx";
 import Multiplication from "./pages/multiplication.jsx";
 import UpgradePage from "/src/pages/UpgradePage.jsx"
 import LoginPage from "./pages/LoginPage.jsx";
+import PlusSums from "./pages/plusSums.jsx";
 
 import LevelSelector from "./pages/LevelSelector.jsx";
 
@@ -44,6 +45,10 @@ const router = createBrowserRouter([
             {
                 path: '/login',
                 element: <LoginPage/>
+            },
+            {
+                path: '/plusSums',
+                element: <PlusSums/>
             }
         ]
     }

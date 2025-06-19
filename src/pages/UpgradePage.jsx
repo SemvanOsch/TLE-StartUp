@@ -29,6 +29,8 @@ import background8 from '/src/images/background8.png'
 import background9 from '/src/images/background9.png'
 import background10 from '/src/images/background10.png'
 import '/src/index.css'
+import SterrenBG from "../component/sterrenBG.jsx";
+
 
 
 const UpgradePage = () => {
@@ -46,6 +48,7 @@ const UpgradePage = () => {
                 const user = await response.json()
                 setMoney(user.coins)
                 setUpgradedStage(user.upgradeStage)
+                setLoading(false);
                 console.log('ingelogd', user)
             }else{
                 window.location.href = '/login'
@@ -125,6 +128,8 @@ const UpgradePage = () => {
     const [upgradedStage, setUpgradedStage] = useState(1)
     const [background, setBackground] = useState(background1)
     const [fadeOverlayVisible, setFadeOverlayVisible] = useState(true);
+    const [loading, setLoading] = useState(true);
+
 
     let blackCatImage = document.getElementById('blackCat')
     let spaceshipWindowImage = document.getElementById('spaceshipWindow')
@@ -287,21 +292,28 @@ const UpgradePage = () => {
         setCurrentButton(money >= 14 ? upgradeButton20 : upgradeButton20disabled);
     }, [money]);
 
+    // if (loading) return null
     return(
-        <div className="relative min-h-screen bg-background text-text flex flex-col items-center justify-center overflow-hidden">
+        <div
+            className=" relative min-h-screen bg-background text-text flex flex-col items-center justify-center overflow-hidden">
+
+
             {/* Fade-in white overlay */}
             <div
                 className={`fixed inset-0 bg-white z-50 transition-opacity duration-1000 pointer-events-none ${
                     fadeOverlayVisible ? 'opacity-100' : 'opacity-0'
                 }`}
             />
-            <div style={{backgroundImage: `url(${background})`, backgroundSize: 'cover', backgroundPosition: 'center', minHeight: '100vh', minWidth: '100vw'}}>
+            <div className="bg-cover bg-center min-h-screen min-w-full z-40" style={{backgroundImage: `url(${background})`}}>
                 <h1 className={'money'}>${money}</h1>
                 <img id={'upgradeButton'} src={currentButton} onClick={useMoney}/>
                 <button onClick={addMoney}>+money</button>
                 <button onClick={handleLoguout}>logout</button>
             </div>
+            <SterrenBG/>
         </div>
+
+
     );
 }
 
