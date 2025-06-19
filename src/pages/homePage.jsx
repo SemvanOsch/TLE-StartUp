@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import {useEffect, useState} from "react";
 import SterrenBG from "../component/sterrenBG.jsx";
+import {getUserCoins} from "../api.js";
 
 const HomePage = () => {
     useEffect(() => {
