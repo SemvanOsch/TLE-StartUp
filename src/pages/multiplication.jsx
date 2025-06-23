@@ -14,8 +14,8 @@ function Multiplication() {
     const [button3Value, setButton3Value] = useState("0");
     const [button4Value, setButton4Value] = useState("0");
 
-    const [number1, setNumber1] = useState(3);
-    const [number2, setNumber2] = useState(3);
+    const [number1, setNumber1] = useState(null);
+    const [number2, setNumber2] = useState(null);
     const [answer, setAnswer] = useState(number1 * number2);
 
     const [question, setQuestion] = useState(0);
@@ -40,6 +40,9 @@ function Multiplication() {
     const [showFadeIn, setShowFadeIn] = useState(true);
 
     const [loading, setLoading] = useState(true);
+    const [timeBonus, setTimeBonus] = useState(0);
+
+
 
 
     useEffect(() => {
@@ -72,13 +75,6 @@ function Multiplication() {
         fetchUser();
     }, []);
 
-    useEffect(() => {
-        const rightAnswerButton = Math.floor(Math.random() * 4);
-        setButton1Value(rightAnswerButton === 0 ? answer : Math.floor(Math.random() * 100));
-        setButton2Value(rightAnswerButton === 1 ? answer : Math.floor(Math.random() * 100));
-        setButton3Value(rightAnswerButton === 2 ? answer : Math.floor(Math.random() * 100));
-        setButton4Value(rightAnswerButton === 3 ? answer : Math.floor(Math.random() * 100));
-    }, [answer]);
 
     useEffect(() => {
         let intervalId;
@@ -88,24 +84,43 @@ function Multiplication() {
         return () => clearInterval(intervalId);
     }, [isRunning]);
 
+    const [askedQuestions, setAskedQuestions] = useState([]);
+
+    useEffect(() => {
+        newQuestion();
+    }, []);
     async function newQuestion() {
-        const newNumber1 = Math.floor(Math.random() * 10) + 1;
-        const newNumber2 = Math.floor(Math.random() * 10) + 1;
-        const newAnswer = newNumber1 * newNumber2;
-        const rightAnswerButton = Math.floor(Math.random() * 4);
+        let newNumber1, newNumber2, newAnswer, key;
 
-        setHiddenButtons([]); // reset knoppen zichtbaar
+        // Avoid repeating the same question
+        do {
+            newNumber1 = Math.floor(Math.random() * 10) + 1;
+            newNumber2 = Math.floor(Math.random() * 10) + 1;
+            key = `${newNumber1}x${newNumber2}`;
+        } while (askedQuestions.includes(key));
 
-        setButton1Value(rightAnswerButton === 0 ? newAnswer : Math.floor(Math.random() * 100));
-        setButton2Value(rightAnswerButton === 1 ? newAnswer : Math.floor(Math.random() * 100));
-        setButton3Value(rightAnswerButton === 2 ? newAnswer : Math.floor(Math.random() * 100));
-        setButton4Value(rightAnswerButton === 3 ? newAnswer : Math.floor(Math.random() * 100));
+        newAnswer = newNumber1 * newNumber2;
+
+        const closeWrong = (newNumber1 * (newNumber2 + 1)); // like 3×4 if real was 3×3
+        const farWrong = newAnswer + 20 + Math.floor(Math.random() * 10); // random far value
+        const sumOfBoth = newNumber1 + newNumber2;
+
+        // Shuffle answers
+        const options = [newAnswer, closeWrong, farWrong, sumOfBoth].sort(() => Math.random() - 0.5);
+
+        setButton1Value(options[0]);
+        setButton2Value(options[1]);
+        setButton3Value(options[2]);
+        setButton4Value(options[3]);
 
         setNumber1(newNumber1);
         setNumber2(newNumber2);
         setAnswer(newAnswer);
         setIsRunning(true);
+        setAskedQuestions(prev => [...prev, key]);
+        setHiddenButtons([]);
     }
+
 
     function findCorrectButtonId() {
         const correctValue = number1 * number2;
@@ -171,8 +186,9 @@ function Multiplication() {
         setIsEndPopup(true);
         setIsRunning(false);
         setFinalTime(time);
-
-        const earnedCoins = correctAmmount;
+        const bonus = 6 - (finalTime/20);
+        setTimeBonus(bonus);
+        const earnedCoins = correctAmmount + 5 +bonus;
 
         try {
             const token = localStorage.getItem('token');
@@ -183,12 +199,13 @@ function Multiplication() {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ amount: earnedCoins })
+
+                body: JSON.stringify({ amount: earnedCoins } )
             });
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(`✅ Added ${earnedCoins} coins. Total now: ${data.coins}`);
+                console.log(`✅ Added ${earnedCoins} coins. Total now: ${data.coins} ${data}`);
             } else {
                 console.log('❌ Error adding coins');
             }
@@ -299,7 +316,7 @@ function Multiplication() {
                             <div className="text-right flex flex-col gap-2">
                                 <h2>5 muntjes</h2>
                                 <h2>{correctAmmount} muntjes</h2>
-                                <h2>3 muntjes</h2>
+                                <h2> {timeBonus-1} muntjes</h2>
                             </div>
                         </div>
                         <button onClick={handleQuitButton}

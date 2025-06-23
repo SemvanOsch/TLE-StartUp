@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import SterrenBG from "../component/sterrenBG.jsx";
 import { useNavigate } from "react-router-dom";
 
@@ -7,6 +7,10 @@ function generateSum() {
     const a = Math.floor(Math.random() * 500);
     const b = Math.floor(Math.random() * 500);
     return { a, b, answer: a + b };
+}
+
+function uniqueId(prefix = '') {
+    return `${prefix}${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
 }
 
 function PlusSums() {
@@ -19,35 +23,11 @@ function PlusSums() {
     const [scoreIndicators, setScoreIndicators] = useState([]);
     const [showFadeIn, setShowFadeIn] = useState(true);
     const [isLeaving, setIsLeaving] = useState(false);
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [laser, setLaser] = useState(null);
 
-    const rocketPosition = { x: 50, y: 95 };
+    const rocketPosition = { x: 50, y: 95 }; // Rocket's laser origin in percentages
     const speed = 0.15;
     const navigate = useNavigate();
-
-    useEffect(() => {
-        async function fetchUser() {
-            const token = localStorage.getItem('token');
-            const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/me', {
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            if (response.ok) {
-                const user = await response.json();
-                setUser(user);
-                console.log('ingelogd', user);
-                setLoading(false);
-            } else {
-                window.location.href = '/login';
-            }
-        }
-
-        fetchUser();
-    }, []);
 
     useEffect(() => {
         const timeout = setTimeout(() => setShowFadeIn(false), 1000);
@@ -61,6 +41,7 @@ function PlusSums() {
                 if (prev <= 1) {
                     clearInterval(interval);
                     setGameOver(true);
+                    addCoinsToServer(); // 👈 here
                     return 0;
                 }
                 return prev - 1;
@@ -69,20 +50,22 @@ function PlusSums() {
         return () => clearInterval(interval);
     }, [gameOver]);
 
+
     useEffect(() => {
         if (gameOver) return;
         const interval = setInterval(() => {
             setMeteors(prev => {
                 if (prev.length >= 2) return prev;
                 const startX = 50 + (Math.random() * 30 - 15);
+                const id = uniqueId('meteor-');
                 return [
                     ...prev,
                     {
-                        id: Date.now(),
+                        id,
                         x: startX,
                         y: 0,
                         size: Math.floor(Math.random() * 50) + 30,
-                        spin: Math.random() > 1 ? 'spin-left' : 'spin-right',
+                        spin: Math.random() > 0.5 ? 'spin-left' : 'spin-right',
                     },
                 ];
             });
@@ -99,7 +82,11 @@ function PlusSums() {
                         const dx = rocketPosition.x - m.x;
                         const dy = rocketPosition.y - m.y;
                         const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 1) return null;
+                        if (dist < 1) {
+                            // Meteor reached the rocket, end the game or handle collision
+                            setGameOver(true);
+                            return null;
+                        }
                         const vx = (dx / dist) * speed;
                         const vy = (dy / dist) * speed;
                         return { ...m, x: m.x + vx, y: m.y + vy };
@@ -112,24 +99,43 @@ function PlusSums() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (gameOver || !input) return;
+
         if (parseInt(input) === sum.answer) {
-            setMeteors(prev => {
-                const [first, ...rest] = prev;
-                if (first) {
-                    const indicatorId = first.id;
-                    setScoreIndicators(indicators => [
-                        ...indicators,
-                        { id: indicatorId, x: first.x, y: first.y }
-                    ]);
-                    setTimeout(() => {
-                        setScoreIndicators(indicators =>
-                            indicators.filter(i => i.id !== indicatorId)
-                        );
-                    }, 3000);
-                }
-                return rest;
-            });
-            setScore(prev => prev + 1);
+            const meteorToDestroy = meteors[0];
+
+            if (meteorToDestroy) {
+                // 1. Fire the laser
+                setLaser({
+                    id: uniqueId('laser-'),
+                    fromX: rocketPosition.x,
+                    fromY: rocketPosition.y,
+                    toX: meteorToDestroy.x,
+                    toY: meteorToDestroy.y,
+                });
+
+                // 2. Show +1 indicator at meteor's position
+                const scoreId = uniqueId('score-');
+                setScoreIndicators(indicators => [
+                    ...indicators,
+                    { id: scoreId, x: meteorToDestroy.x, y: meteorToDestroy.y }
+                ]);
+                setTimeout(() => {
+                    setScoreIndicators(indicators => indicators.filter(i => i.id !== scoreId));
+                }, 1000);
+
+                // 3. After a short delay (laser travel time), destroy the meteor & update score
+                setTimeout(() => {
+                    setMeteors(prev => prev.filter(m => m.id !== meteorToDestroy.id));
+                    setScore(prev => prev + 1);
+                }, 100);
+
+                // 4. Remove the laser visual after its animation
+                setTimeout(() => setLaser(null), 300);
+            } else {
+                // If no meteors, just give points
+                setScore(prev => prev + 1);
+            }
             setSum(generateSum());
         }
         setInput('');
@@ -137,19 +143,43 @@ function PlusSums() {
 
     const handleBackToHome = () => {
         setIsLeaving(true);
-        setGameOver(false); // reset gameOver
-
+        setGameOver(false);
         setTimeout(() => {
             navigate("/", { state: { fromLevel: true } });
         }, 2300);
     };
 
-    if (loading) return null
+    async function addCoinsToServer() {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch('http://localhost:3001/api/game/me/coins', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',  // 👈 Add this
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ amount: score })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Coins added:", data.coins);
+            } else {
+                console.error('Failed to add coins');
+            }
+        } catch (error) {
+            console.error("Error adding coins:", error);
+        }
+    }
+
+
+
     return (
         <main className="relative w-full h-screen bg-background text-white overflow-hidden">
             <SterrenBG />
 
-            {/* Tijdbalk */}
+            {/* Timer Bar */}
             <div className="absolute top-2 left-2 w-[150px] h-2 bg-gray-700 rounded overflow-hidden shadow-md z-40">
                 <div
                     className="h-full bg-green-500 transition-all duration-1000"
@@ -157,17 +187,17 @@ function PlusSums() {
                 />
             </div>
 
-            {/* Vraag */}
+            {/* Question */}
             <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-5xl z-40">
                 Wat is {sum.a} + {sum.b}?
             </div>
 
             {/* Score */}
-            <div id="score-container" className="absolute top-4 right-4 text-xl z-40">
+            <div className="absolute top-4 right-4 text-xl z-40">
                 Munten: {score}
             </div>
 
-            {/* Input */}
+            {/* Answer Input */}
             <form
                 onSubmit={handleSubmit}
                 className="absolute flex items-center gap-2"
@@ -196,26 +226,71 @@ function PlusSums() {
                 </button>
             </form>
 
-            {/* Meteoren */}
-            {meteors.map(meteor => (
-                <img
-                    key={meteor.id}
-                    src="/meteor.png"
-                    alt="Meteor"
-                    className={`absolute pointer-events-none ${meteor.spin}`}
-                    style={{
-                        left: `${meteor.x}%`,
-                        top: `${meteor.y}%`,
-                        width: `${meteor.size}px`,
-                        height: `${meteor.size}px`,
-                        transform: 'translate(-50%, -50%)',
-                        transition: 'top 0.1s linear, left 0.1s linear',
-                        zIndex: 10,
-                    }}
-                />
-            ))}
+            {/* Meteors */}
+            <AnimatePresence>
+                {meteors.map(meteor => (
+                    <motion.img
+                        key={meteor.id}
+                        src="/meteor.png"
+                        alt="Meteor"
+                        className={`absolute pointer-events-none ${meteor.spin}`}
+                        initial={{ opacity: 0, scale: 0 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0, transition: { duration: 0.2 } }}
+                        style={{
+                            left: `${meteor.x}%`,
+                            top: `${meteor.y}%`,
+                            width: `${meteor.size}px`,
+                            height: `${meteor.size}px`,
+                            transform: 'translate(-50%, -50%)',
+                            transition: 'top 0.1s linear, left 0.1s linear',
+                            zIndex: 10,
+                        }}
+                    />
+                ))}
+            </AnimatePresence>
 
-            {/* +1 Score Indicator */}
+
+            {/* Laser Beam using SVG */}
+            <div className="absolute top-0 left-0 w-full h-full pointer-events-none" style={{ zIndex: 25 }}>
+                <AnimatePresence>
+                    {laser && (
+                        <svg className="w-full h-full">
+                            <motion.line
+                                key={laser.id}
+                                x1={`${laser.fromX}%`}
+                                y1={`${laser.fromY}%`}
+                                x2={`${laser.toX}%`}
+                                y2={`${laser.toY}%`}
+                                stroke="hsl(0, 100%, 50%)"
+                                strokeWidth="4"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.1 }} // A quick flash
+                            />
+                            {/* Optional: A wider, semi-transparent line for a glow effect */}
+                            <motion.line
+                                key={`${laser.id}-glow`}
+                                x1={`${laser.fromX}%`}
+                                y1={`${laser.fromY}%`}
+                                x2={`${laser.toX}%`}
+                                y2={`${laser.toY}%`}
+                                stroke="hsl(0, 100%, 70%)"
+                                strokeWidth="12"
+                                strokeLinecap="round"
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 0.5 }}
+                                exit={{ opacity: 0 }}
+                                transition={{ duration: 0.1 }}
+                            />
+                        </svg>
+                    )}
+                </AnimatePresence>
+            </div>
+
+
+            {/* +1 Indicator */}
             {scoreIndicators.map(indicator => (
                 <div
                     key={indicator.id}
@@ -231,7 +306,7 @@ function PlusSums() {
                 </div>
             ))}
 
-            {/* Raket met animatie */}
+            {/* Rocket */}
             <motion.img
                 src="/testRaket.png"
                 alt="Raket"
@@ -245,12 +320,12 @@ function PlusSums() {
                     pointerEvents: 'none',
                     zIndex: 30,
                 }}
-                initial={{x: '-50%'}}
-                animate={isLeaving ? { y: -2000} : {}}
+                initial={{ x: '-50%' }}
+                animate={isLeaving ? { y: -2000 } : {}}
                 transition={{ duration: 3, ease: "easeInOut" }}
             />
 
-            {/* Game Over Overlay */}
+            {/* Game Over */}
             {gameOver && !isLeaving && (
                 <div className="absolute inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center text-center p-4 z-50">
                     <h2 className="text-3xl font-bold mb-4">⏰ Tijd is op!</h2>
@@ -264,7 +339,7 @@ function PlusSums() {
                 </div>
             )}
 
-            {/* Fade-in overlay bij laden */}
+            {/* Fade-in */}
             {showFadeIn && (
                 <motion.div
                     className="fixed inset-0 bg-background z-50"
