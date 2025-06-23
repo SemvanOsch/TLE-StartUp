@@ -19,10 +19,35 @@ function PlusSums() {
     const [scoreIndicators, setScoreIndicators] = useState([]);
     const [showFadeIn, setShowFadeIn] = useState(true);
     const [isLeaving, setIsLeaving] = useState(false);
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const rocketPosition = { x: 50, y: 95 };
     const speed = 0.15;
     const navigate = useNavigate();
+
+    useEffect(() => {
+        async function fetchUser() {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:3001/api/game/me', {
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                setUser(user);
+                console.log('ingelogd', user);
+                setLoading(false);
+            } else {
+                window.location.href = '/login';
+            }
+        }
+
+        fetchUser();
+    }, []);
 
     useEffect(() => {
         const timeout = setTimeout(() => setShowFadeIn(false), 1000);
@@ -119,6 +144,7 @@ function PlusSums() {
         }, 2300);
     };
 
+    if (loading) return null
     return (
         <main className="relative w-full h-screen bg-background text-white overflow-hidden">
             <SterrenBG />
