@@ -40,7 +40,7 @@ function Multiplication() {
     const [showFadeIn, setShowFadeIn] = useState(true);
 
     const [loading, setLoading] = useState(true);
-
+    const [timeBonus, setTimeBonus] = useState(0);
 
     useEffect(() => {
         const timeout = setTimeout(() => setShowFadeIn(false), 1000); // 1s fade
@@ -171,8 +171,9 @@ function Multiplication() {
         setIsEndPopup(true);
         setIsRunning(false);
         setFinalTime(time);
-
-        const earnedCoins = correctAmmount;
+        const bonus = 6 - (finalTime/20);
+        setTimeBonus(bonus);
+        const earnedCoins = correctAmmount + 5 +bonus;
 
         try {
             const token = localStorage.getItem('token');
@@ -183,12 +184,13 @@ function Multiplication() {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ amount: earnedCoins })
+
+                body: JSON.stringify({ amount: earnedCoins } )
             });
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(`✅ Added ${earnedCoins} coins. Total now: ${data.coins}`);
+                console.log(`✅ Added ${earnedCoins} coins. Total now: ${data.coins} ${data}`);
             } else {
                 console.log('❌ Error adding coins');
             }
@@ -299,7 +301,7 @@ function Multiplication() {
                             <div className="text-right flex flex-col gap-2">
                                 <h2>5 muntjes</h2>
                                 <h2>{correctAmmount} muntjes</h2>
-                                <h2>3 muntjes</h2>
+                                <h2> {timeBonus-1} muntjes</h2>
                             </div>
                         </div>
                         <button onClick={handleQuitButton}
