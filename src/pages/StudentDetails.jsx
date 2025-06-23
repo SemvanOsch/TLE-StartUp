@@ -6,7 +6,7 @@ function Student() {
     useEffect(() => {
         async function fetchUser(){
             const token = localStorage.getItem('token')
-            const response = await fetch('http://localhost:3001/api/game/me',{
+            const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/me',{
                 headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${token}`
@@ -38,7 +38,7 @@ function Student() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const userRes = await fetch(`http://localhost:3001/api/game/user/${id}`, {
+                const userRes = await fetch(`https://planeetwiskunde-backend.onrender.com/api/game/user/${id}`, {
                     headers: {
                         Accept: "application/json"
                     }
@@ -46,7 +46,7 @@ function Student() {
                 const userData = await userRes.json();
                 setUser(userData.user);
 
-                const scoresRes = await fetch(`http://localhost:3001/api/game/scores/${id}`, {
+                const scoresRes = await fetch(`https://planeetwiskunde-backend.onrender.com/api/game/scores/${id}`, {
                     headers: {
                         Accept: "application/json"
                     }

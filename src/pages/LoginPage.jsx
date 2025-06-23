@@ -6,7 +6,7 @@ const LoginPage = () => {
 
     async function handleLogin() {
         try {
-            const response = await fetch("http://localhost:3001/api/game/login", {
+            const response = await fetch("https://planeetwiskunde-backend.onrender.com/api/game/login", {
                 method: "POST",
                 headers: {
                     Accept: "application/json",

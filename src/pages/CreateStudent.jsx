@@ -7,7 +7,7 @@ function CreateStudent(){
     useEffect(() => {
         async function fetchUser(){
             const token = localStorage.getItem('token')
-            const response = await fetch('http://localhost:3001/api/game/me',{
+            const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/me',{
                 headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${token}`
@@ -49,7 +49,7 @@ function CreateStudent(){
     };
     async function postUser(data) {
         try {
-            const response = await fetch('http://localhost:3001/api/game/user', {
+            const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/user', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',

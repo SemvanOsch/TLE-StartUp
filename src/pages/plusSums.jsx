@@ -29,7 +29,7 @@ function PlusSums() {
     useEffect(() => {
         async function fetchUser() {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:3001/api/game/me', {
+            const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/me', {
                 headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${token}`

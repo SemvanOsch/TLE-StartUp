@@ -37,7 +37,7 @@ const UpgradePage = () => {
     useEffect(() => {
         async function fetchUser(){
             const token = localStorage.getItem('token')
-            const response = await fetch('http://localhost:3001/api/game/me',{
+            const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/me',{
                 headers: {
                     Accept: 'application/json',
                     Authorization: `Bearer ${token}`
@@ -60,7 +60,7 @@ const UpgradePage = () => {
 
     async function addMoney(){
         const token = localStorage.getItem('token')
-        const response = await fetch('http://localhost:3001/api/game/me/coins',{
+        const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/me/coins',{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -79,7 +79,7 @@ const UpgradePage = () => {
     }
     async function removeMoney(amount){
         const token = localStorage.getItem('token')
-        const response = await fetch('http://localhost:3001/api/game/me/coins',{
+        const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/me/coins',{
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -98,7 +98,7 @@ const UpgradePage = () => {
     }
     async function handleLoguout(){
         try {
-            await fetch("http://localhost:3001/api/game/logout", { method: "POST" });
+            await fetch("https://planeetwiskunde-backend.onrender.com/api/game/logout", { method: "POST" });
 
             localStorage.removeItem("token");
 
@@ -110,7 +110,7 @@ const UpgradePage = () => {
 
     async function changeStage(stage){
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3001/api/game/upgrade`, {
+        const response = await fetch(`https://planeetwiskunde-backend.onrender.com/api/game/upgrade`, {
             method: 'PUT',
             headers: {
                 Accept: 'application/json',
