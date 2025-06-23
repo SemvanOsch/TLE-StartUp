@@ -152,14 +152,14 @@ function PlusSums() {
     async function addCoinsToServer() {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch('http://localhost:3001/api/game/me/coins', {
+            const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/me/coins', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',  // 👈 Add this
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ amount: score })
+                body: JSON.stringify({ amount: score * 3 })
             });
 
             if (response.ok) {
