@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import upgradeButton20 from '/src/images/upgrade20.png'
 import upgradeButton20disabled from '/src/images/upgrade20disabled.png'
 import upgradeButton50 from '/src/images/upgrade50.png'
@@ -33,7 +34,9 @@ import SterrenBG from "../component/sterrenBG.jsx";
 
 
 
+
 const UpgradePage = () => {
+    const navigate = useNavigate();
     useEffect(() => {
         async function fetchUser(){
             const token = localStorage.getItem('token')
@@ -309,6 +312,15 @@ const UpgradePage = () => {
                 <img id={'upgradeButton'} src={currentButton} onClick={useMoney}/>
                 <button onClick={addMoney}>+money</button>
                 <button onClick={handleLoguout}>logout</button>
+                <div className="absolute top-4 left-4 z-30">
+                    <button
+                        onClick={() => navigate("/")}
+                        className="text-white text-2xl hover:scale-110 transition-transform"
+                        title="Ga naar home"
+                    >
+                        🏠
+                    </button>
+                </div>
             </div>
             <SterrenBG/>
         </div>
