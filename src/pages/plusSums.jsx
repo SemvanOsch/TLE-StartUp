@@ -159,7 +159,7 @@ function PlusSums() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ amount: score })
+                body: JSON.stringify({ amount: score * 3 })
             });
 
             if (response.ok) {
