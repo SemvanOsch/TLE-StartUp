@@ -41,6 +41,7 @@ function PlusSums() {
                 if (prev <= 1) {
                     clearInterval(interval);
                     setGameOver(true);
+                    addCoinsToServer(); // 👈 here
                     return 0;
                 }
                 return prev - 1;
@@ -48,6 +49,7 @@ function PlusSums() {
         }, 1000);
         return () => clearInterval(interval);
     }, [gameOver]);
+
 
     useEffect(() => {
         if (gameOver) return;
@@ -146,6 +148,32 @@ function PlusSums() {
             navigate("/", { state: { fromLevel: true } });
         }, 2300);
     };
+
+    async function addCoinsToServer() {
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch('http://localhost:3001/api/game/me/coins', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',  // 👈 Add this
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ amount: score })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Coins added:", data.coins);
+            } else {
+                console.error('Failed to add coins');
+            }
+        } catch (error) {
+            console.error("Error adding coins:", error);
+        }
+    }
+
+
 
     return (
         <main className="relative w-full h-screen bg-background text-white overflow-hidden">
