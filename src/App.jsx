@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage.jsx";
 import PlusSums from "./pages/plusSums.jsx";
 import Subtraction from "./pages/subtraction.jsx";
 import LevelSelector from "./pages/levelSelector.jsx";
+import Division from "./pages/Division.jsx";
 
 
 

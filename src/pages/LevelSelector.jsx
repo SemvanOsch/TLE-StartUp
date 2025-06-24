@@ -15,7 +15,6 @@ import plusopiaR from "../img/plusopiaR.png";
 import plusopiaa from "/planeten/Plusopiaa.png";
 import xtropilosL from "../img/xtropilosL.png";
 import xtropilosR from "../img/xtropilosR.png";
-import xtropiloss from "/planeten/Xtropolis.png";
 import {getUserCoins} from "../api.js";
 import xtropiloss from "/planeten/Xtropoliss.png";
 
