@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import SterrenBG from "../component/sterrenBG.jsx";
+import SterrenBG from "../component/SterrenBG.jsx";
 import alienImg from "../img/alien.png";
 import raketImg from "/testRaket.png";
 import halverraL from "../img/halverraL.png";
