@@ -69,6 +69,18 @@ const HomePage = () => {
         }, 5000); // wacht tot animatie voorbij is
     };
 
+    async function handleLogout(){
+        try {
+            await fetch("https://planeetwiskunde-backend.onrender.com/api/game/logout", { method: "POST" });
+
+            localStorage.removeItem("token");
+
+            window.location.href = "/login";
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <div className="relative min-h-screen overflow-hidden">
             <SterrenBG versneld={startLaunch} />
@@ -99,6 +111,7 @@ const HomePage = () => {
                     src="Profile.png"
                     alt="Profiel"
                     className="absolute top-1 right-10 w-12 h-12 rounded-full shadow-lg"
+                    onClick={handleLogout}
                 />
                 <div
                     className="absolute top-4 right-28 bg-yellow-300 text-black font-bold py-2 px-4 rounded-full shadow-lg text-lg z-20">

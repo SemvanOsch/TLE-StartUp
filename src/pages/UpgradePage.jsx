@@ -106,7 +106,7 @@ const UpgradePage = () => {
         } catch (error) {
             console.error(error);
         }
-    };
+    }
 
     async function changeStage(stage){
         const token = localStorage.getItem('token');

@@ -25,10 +25,35 @@ function PlusSums() {
     const [isLeaving, setIsLeaving] = useState(false);
     const [laser, setLaser] = useState(null);
 
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     const rocketPosition = { x: 50, y: 95 }; // Rocket's laser origin in percentages
     const speed = 0.15;
     const navigate = useNavigate();
 
+    useEffect(() => {
+        async function fetchUser() {
+            const token = localStorage.getItem('token');
+            const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/me', {
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                setUser(user);
+                console.log('ingelogd', user);
+                setLoading(false);
+            } else {
+                window.location.href = '/login';
+            }
+        }
+
+        fetchUser();
+    }, []);
     useEffect(() => {
         const timeout = setTimeout(() => setShowFadeIn(false), 1000);
         return () => clearTimeout(timeout);
@@ -174,7 +199,7 @@ function PlusSums() {
     }
 
 
-
+    if (loading) return null
     return (
         <main className="relative w-full h-screen bg-background text-white overflow-hidden">
             <SterrenBG />
