@@ -10,6 +10,7 @@ import LoginPage from "./pages/LoginPage.jsx";
 import PlusSums from "./pages/PlusSums.jsx";
 
 import LevelSelector from "./pages/LevelSelector.jsx";
+import Division from "./pages/division.jsx";
 
 const router = createBrowserRouter([
     {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
             {
                 path: '/multiplication',
                 element: <Multiplication/>,
+            },
+            {
+                path: '/division',
+                element: <Division/>,
             },
             {
                 path: '/upgrade',
