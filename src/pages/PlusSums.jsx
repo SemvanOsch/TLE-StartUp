@@ -18,7 +18,7 @@ function PlusSums() {
     const [input, setInput] = useState('');
     const [score, setScore] = useState(0);
     const [meteors, setMeteors] = useState([]);
-    const [timeLeft, setTimeLeft] = useState(60);
+    const [timeLeft, setTimeLeft] = useState(180);
     const [gameOver, setGameOver] = useState(false);
     const [scoreIndicators, setScoreIndicators] = useState([]);
     const [showFadeIn, setShowFadeIn] = useState(true);
@@ -208,7 +208,7 @@ function PlusSums() {
             <div className="absolute top-2 left-2 w-[150px] h-2 bg-gray-700 rounded overflow-hidden shadow-md z-40">
                 <div
                     className="h-full bg-green-500 transition-all duration-1000"
-                    style={{ width: `${(timeLeft / 60) * 100}%` }}
+                    style={{ width: `${(timeLeft / 180) * 100}%` }}
                 />
             </div>
 

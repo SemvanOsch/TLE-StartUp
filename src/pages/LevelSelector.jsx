@@ -48,7 +48,7 @@ const levels = [
         leftArrow: halverraL,
         rightArrow: halverraR,
         planetImg: halverraa,
-        path: "/"
+        path: "/division"
     },
 ];
 
