@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import {createBrowserRouter, RouterProvider} from "react-router";
-import HomePage from "./pages/HomePage.jsx";
+import HomePage from "./pages/homePage.jsx";
 import StudentOverview from "./pages/StudentOverview.jsx";
 import Student from "./pages/StudentDetails.jsx";
 import CreateStudent from "./pages/CreateStudent.jsx";
-import Multiplication from "./pages/Multiplication.jsx";
+import Multiplication from "./pages/multiplication.jsx";
 import UpgradePage from "/src/pages/UpgradePage.jsx"
 import LoginPage from "./pages/LoginPage.jsx";
-import PlusSums from "./pages/PlusSums.jsx";
+import PlusSums from "./pages/plusSums.jsx";
+import Subtraction from "./pages/subtraction.jsx";
+import LevelSelector from "./pages/levelSelector.jsx";
 
-import LevelSelector from "./pages/LevelSelector.jsx";
-import Division from "./pages/Division.jsx";
+
 
 const router = createBrowserRouter([
     {
@@ -55,9 +56,10 @@ const router = createBrowserRouter([
                 path: '/plusSums',
                 element: <PlusSums/>
             },
+
             {
-                path: '/division',
-                element: <Division/>
+                path: '/subtraction',
+                element: <Subtraction/>
             }
         ]
     }
