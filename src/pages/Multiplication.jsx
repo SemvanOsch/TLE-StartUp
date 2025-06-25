@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router";
 import { motion } from "motion/react";
-import SterrenBG_Game from "../component/sterrenBG_game.jsx";
+import SterrenBG_Game from "../component/SterrenBG_game.jsx";
 
 function Multiplication() {
     const navigate = useNavigate();
