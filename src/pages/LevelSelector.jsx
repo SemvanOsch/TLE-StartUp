@@ -158,12 +158,17 @@ const LevelSelector = () => {
             <div className="absolute top-4 left-4 z-30">
                 <button
                     onClick={() => navigate("/")}
-                    className="text-white text-2xl hover:scale-110 transition-transform"
+                    className="hover:scale-110 transition-transform"
                     title="Ga naar home"
                 >
-                    🏠
+                    <img
+                        src="/Home.png"
+                        alt="Home"
+                        className="w-8 h-8" // Pas deze waarden aan indien nodig
+                    />
                 </button>
             </div>
+
 
             {showShootingStar && (
                 <motion.div
