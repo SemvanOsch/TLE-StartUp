@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SterrenBG from "../component/sterrenBG.jsx";
+import SterrenBG from "../component/SterrenBG.jsx";
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({ name: "", password: "" });

@@ -30,7 +30,7 @@ import background8 from '/src/images/background8.png'
 import background9 from '/src/images/background9.png'
 import background10 from '/src/images/background10.png'
 import '/src/index.css'
-import SterrenBG from "../component/sterrenBG.jsx";
+import SterrenBG from "../component/SterrenBG.jsx";
 
 
 
