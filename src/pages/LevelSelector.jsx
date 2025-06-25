@@ -33,7 +33,7 @@ const levels = [
         leftArrow: minariaL,
         rightArrow: minariaR,
         planetImg: minariaa,
-        path: "/"
+        path: "/subtraction"
     },
     {
         name: "X-tropilos",

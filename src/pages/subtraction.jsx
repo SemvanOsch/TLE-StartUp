@@ -149,7 +149,7 @@ function Subtraction() {
         setIsLeaving(true);
         setGameOver(false);
         setTimeout(() => {
-            navigate("/level-selector");
+            navigate("/levels");
         }, 2300);
     };
 
