@@ -9,7 +9,7 @@ import UpgradePage from "/src/pages/UpgradePage.jsx"
 import LoginPage from "./pages/LoginPage.jsx";
 import PlusSums from "./pages/PlusSums.jsx";
 import Subtraction from "./pages/Subtraction.jsx";
-import LevelSelector from "./pages/levelSelector.jsx";
+import LevelSelector from "./pages/LevelSelector.jsx";
 import Division from "./pages/Division.jsx";
 
 
