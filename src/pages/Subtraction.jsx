@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import SterrenBG from "../component/sterrenBG.jsx";
+import SterrenBG from "../component/SterrenBG.jsx";
 import { useNavigate } from "react-router-dom";
 
 // MODIFIED: Generates a subtraction problem, ensuring the result is not negative.
