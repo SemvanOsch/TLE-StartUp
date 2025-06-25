@@ -19,7 +19,7 @@ function Multiplication() {
     const [answer, setAnswer] = useState(number1 * number2);
 
     const [question, setQuestion] = useState(0);
-    const questionCount = 5;
+    const questionCount = 15;
     const [correctAmmount, setCorrectAmmount] = useState(0);
     const [isCorrect, setIsCorrect] = useState(false);
     const [isIncorrect, setIsIncorrect] = useState(false);
@@ -42,15 +42,12 @@ function Multiplication() {
     const [loading, setLoading] = useState(true);
     const [timeBonus, setTimeBonus] = useState(0);
 
-
-
+    const [hasMadeMistake, setHasMadeMistake] = useState(false); // 🆕
 
     useEffect(() => {
-        const timeout = setTimeout(() => setShowFadeIn(false), 1000); // 1s fade
+        const timeout = setTimeout(() => setShowFadeIn(false), 1000);
         return () => clearTimeout(timeout);
     }, []);
-
-
 
     useEffect(() => {
         async function fetchUser() {
@@ -75,7 +72,6 @@ function Multiplication() {
         fetchUser();
     }, []);
 
-
     useEffect(() => {
         let intervalId;
         if (isRunning) {
@@ -89,10 +85,9 @@ function Multiplication() {
     useEffect(() => {
         newQuestion();
     }, []);
+
     async function newQuestion() {
         let newNumber1, newNumber2, newAnswer, key;
-
-        // Avoid repeating the same question
         do {
             newNumber1 = Math.floor(Math.random() * 10) + 1;
             newNumber2 = Math.floor(Math.random() * 10) + 1;
@@ -100,12 +95,10 @@ function Multiplication() {
         } while (askedQuestions.includes(key));
 
         newAnswer = newNumber1 * newNumber2;
-
-        const closeWrong = (newNumber1 * (newNumber2 + 1)); // like 3×4 if real was 3×3
-        const farWrong = newAnswer + 20 + Math.floor(Math.random() * 10); // random far value
+        const closeWrong = newNumber1 * (newNumber2 + 1);
+        const farWrong = newAnswer + 20 + Math.floor(Math.random() * 10);
         const sumOfBoth = newNumber1 + newNumber2;
 
-        // Shuffle answers
         const options = [newAnswer, closeWrong, farWrong, sumOfBoth].sort(() => Math.random() - 0.5);
 
         setButton1Value(options[0]);
@@ -119,16 +112,7 @@ function Multiplication() {
         setIsRunning(true);
         setAskedQuestions(prev => [...prev, key]);
         setHiddenButtons([]);
-    }
-
-
-    function findCorrectButtonId() {
-        const correctValue = number1 * number2;
-        if (parseInt(button1Value) === correctValue) return "1";
-        if (parseInt(button2Value) === correctValue) return "2";
-        if (parseInt(button3Value) === correctValue) return "3";
-        if (parseInt(button4Value) === correctValue) return "4";
-        return null;
+        setHasMadeMistake(false); // 🆕 reset foutstatus
     }
 
     function handleAnswerButton(event) {
@@ -143,12 +127,11 @@ function Multiplication() {
             setSpeedMult(8);
 
             setTimeout(() => {
-
                 setIsCorrect(false);
                 handleSpeed();
-
                 setCorrectAmmount(prev => prev + 1);
                 setQuestion(prev => prev + 1);
+
                 if (question === questionCount - 1) {
                     endLesson();
                 } else {
@@ -158,15 +141,31 @@ function Multiplication() {
                 }
             }, 1500);
         } else {
-            setHiddenButtons([...hiddenButtons, id]); // verberg alleen fout aangeklikte knop
-            setIsIncorrect(true);
-            setIncorrectButtonId(id);
-            setRotate(prev => prev - 360);
+            if (!hasMadeMistake) {
+                // Eerste fout
+                setHiddenButtons([...hiddenButtons, id]);
+                setIsIncorrect(true);
+                setIncorrectButtonId(id);
+                setRotate(prev => prev - 360);
+                setHasMadeMistake(true);
 
-            setTimeout(() => {
-                setIsIncorrect(false);
-                setIncorrectButtonId(null);
-            }, 1000);
+                setTimeout(() => {
+                    setIsIncorrect(false);
+                    setIncorrectButtonId(null);
+                }, 1000);
+            } else {
+                // Tweede fout: nieuwe vraag zonder scoreverhoging
+                setIsIncorrect(true);
+                setRotate(prev => prev - 360);
+
+                setTimeout(() => {
+                    setIsIncorrect(false);
+                    setIncorrectButtonId(null);
+                    setX(200);
+                    setY(visualViewport.height / 2 - 100);
+                    newQuestion(); // zonder setQuestion
+                }, 1000);
+            }
         }
     }
 
@@ -186,9 +185,9 @@ function Multiplication() {
         setIsEndPopup(true);
         setIsRunning(false);
         setFinalTime(time);
-        const bonus = 6 - (finalTime/20);
+        const bonus = 6 - (finalTime / 20);
         setTimeBonus(bonus);
-        const earnedCoins = correctAmmount + 5 +bonus;
+        const earnedCoins = correctAmmount + 5 + bonus;
 
         try {
             const token = localStorage.getItem('token');
@@ -199,13 +198,12 @@ function Multiplication() {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
-
-                body: JSON.stringify({ amount: earnedCoins } )
+                body: JSON.stringify({ amount: earnedCoins })
             });
 
             if (response.ok) {
                 const data = await response.json();
-                console.log(`✅ Added ${earnedCoins} coins. Total now: ${data.coins} ${data}`);
+                console.log(`✅ Added ${earnedCoins} coins. Total now: ${data.coins}`);
             } else {
                 console.log('❌ Error adding coins');
             }
@@ -225,7 +223,9 @@ function Multiplication() {
         const visibility = hiddenButtons.includes(id.toString()) ? "invisible" : "";
         return `${positionMap[id.toString()]} ${base} ${visibility}`;
     };
-    if (loading) return null
+
+    if (loading) return null;
+
     return (
         <main className="bg-background">
             <SterrenBG_Game versnelling={speedMult} />
@@ -236,16 +236,8 @@ function Multiplication() {
                 className="absolute flex flex-col justify-center z-40 w-80 h-40"
             >
                 <div className="relative w-full h-full">
-                    <img
-                        src="/testRaketRotated.png"
-                        className="w-full h-full relative z-10"
-                        alt="Rocket"
-                    />
-                    <img
-                        src="/flame.gif"
-                        alt="Flame"
-                        className="w-14 absolute left-1/2 -translate-x-40 top-full -mt-32 -rotate-90 z-0"
-                    />
+                    <img src="/testRaketRotated.png" className="w-full h-full relative z-10" alt="Rocket" />
+                    <img src="/flame.gif" alt="Flame" className="w-14 absolute left-1/2 -translate-x-40 top-full -mt-32 -rotate-90 z-0" />
                 </div>
             </motion.div>
 
@@ -296,10 +288,8 @@ function Multiplication() {
             </section>
 
             <section className="fixed top-5 left-1/2 transform -translate-x-1/2 pt-10 text-center">
-                <h2 className={`text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)] ${
-                    isCorrect ? 'text-green-500' : isIncorrect ? 'text-red-500' : 'text-text'
-                }`}>
-                    {number1} x {number2}
+                <h2 className={`text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)] ${isCorrect ? 'text-green-500' : isIncorrect ? 'text-red-500' : 'text-text'}`}>
+                    {number1} x {number2} =
                 </h2>
             </section>
 
@@ -316,11 +306,10 @@ function Multiplication() {
                             <div className="text-right flex flex-col gap-2">
                                 <h2>5 muntjes</h2>
                                 <h2>{correctAmmount} muntjes</h2>
-                                <h2> {timeBonus-1} muntjes</h2>
+                                <h2>{(timeBonus - 1).toFixed(1)} muntjes</h2>
                             </div>
                         </div>
-                        <button onClick={handleQuitButton}
-                                className="mt-4 bg-RaketGreenBtn rounded-lg pb-4 pt-4 text-background shadow-custom-blue">
+                        <button onClick={handleQuitButton} className="mt-4 bg-RaketGreenBtn rounded-lg pb-4 pt-4 text-background shadow-custom-blue">
                             <p>Terug naar raket</p>
                         </button>
                     </div>
@@ -328,14 +317,8 @@ function Multiplication() {
             )}
 
             {showFadeIn && (
-                <motion.div
-                    className="fixed inset-0 bg-background z-50"
-                    initial={{ opacity: 1 }}
-                    animate={{ opacity: 0 }}
-                    transition={{ duration: 2 }}
-                />
+                <motion.div className="fixed inset-0 bg-background z-50" initial={{ opacity: 1 }} animate={{ opacity: 0 }} transition={{ duration: 2 }} />
             )}
-
         </main>
     );
 }

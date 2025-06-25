@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import SterrenBG from "../component/sterrenBG.jsx";
 
 const LoginPage = () => {
     const [formData, setFormData] = useState({ name: "", password: "" });
@@ -50,6 +51,7 @@ const LoginPage = () => {
     };
 
     return (
+        <div>
         <form id="loginContainer" onSubmit={handleSubmit}>
             <h1 className="login-title">Login</h1>
             <input
@@ -74,6 +76,7 @@ const LoginPage = () => {
                 <p style={{ color: "red", marginTop: "1em" }}>{errorMessage}</p>
             )}
         </form>
+        </div>
     );
 };
 
