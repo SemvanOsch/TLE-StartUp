@@ -7,7 +7,7 @@ import CreateStudent from "./pages/CreateStudent.jsx";
 import Multiplication from "./pages/Multiplication.jsx";
 import UpgradePage from "/src/pages/UpgradePage.jsx"
 import LoginPage from "./pages/LoginPage.jsx";
-import PlusSums from "./pages/plusSums.jsx";
+import PlusSums from "./pages/PlusSums.jsx";
 import Subtraction from "./pages/Subtraction.jsx";
 import LevelSelector from "./pages/levelSelector.jsx";
 import Division from "./pages/Division.jsx";
