@@ -19,7 +19,7 @@ function Division() {
     const [answer, setAnswer] = useState(number1 * number2);
 
     const [question, setQuestion] = useState(0);
-    const questionCount = 10;
+    const questionCount = 15;
     const [correctAmmount, setCorrectAmmount] = useState(0);
     const [isCorrect, setIsCorrect] = useState(false);
     const [isIncorrect, setIsIncorrect] = useState(false);
@@ -99,7 +99,7 @@ function Division() {
         dividedAnswer = newAnswer / newNumber1;
 
         const closeWrong = dividedAnswer + 1;
-        const farWrong = newAnswer + 20 + Math.floor(Math.random() * 10);
+        const farWrong = Math.floor(Math.random() * 10);
         const sumOfBoth = newNumber1 + newNumber2;
 
         const options = [dividedAnswer, closeWrong, farWrong, sumOfBoth].sort(() => Math.random() - 0.5);
