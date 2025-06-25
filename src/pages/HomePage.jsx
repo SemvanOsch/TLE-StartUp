@@ -18,6 +18,7 @@ const HomePage = () => {
                 const user = await response.json()
                 setUser(user)
                 console.log('ingelogd', user)
+                setLoading(false);
             }else{
                 window.location.href = '/login'
             }
@@ -80,7 +81,8 @@ const HomePage = () => {
             console.error(error);
         }
     }
-
+    const [loading, setLoading] = useState(true);
+    if (loading) return null
     return (
         <div className="relative min-h-screen overflow-hidden">
             <SterrenBG versneld={startLaunch} />

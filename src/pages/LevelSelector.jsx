@@ -73,7 +73,7 @@ const LevelSelector = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-
+            if (response.ok)  setLoading(false);
             if (!response.ok) window.location.href = "/login";
         }
 
@@ -122,6 +122,8 @@ const LevelSelector = () => {
             setTimeout(() => navigate(levels[index].path), 2000);
         }
     };
+    const [loading, setLoading] = useState(true);
+    if (loading) return null
     return (
         <motion.div
             className="relative h-screen bg-black text-white overflow-hidden"
