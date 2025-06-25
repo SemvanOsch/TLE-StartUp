@@ -281,7 +281,7 @@ const UpgradePage = () => {
         }
     }
 
-    useEffect(changeButton)
+    useEffect(changeButton, [money, upgradedStage])
     useEffect(() => {
         // Fade away the white overlay shortly after mount
         const timeout = setTimeout(() => {
@@ -291,9 +291,6 @@ const UpgradePage = () => {
         return () => clearTimeout(timeout);
     }, []);
 
-    useEffect(() => {
-        setCurrentButton(money >= 14 ? upgradeButton20 : upgradeButton20disabled);
-    }, [money]);
 
     if (loading) return null
     return(
