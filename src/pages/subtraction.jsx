@@ -3,57 +3,40 @@ import { motion, AnimatePresence } from "framer-motion";
 import SterrenBG from "../component/sterrenBG.jsx";
 import { useNavigate } from "react-router-dom";
 
-function generateSum() {
-    const a = Math.floor(Math.random() * 500);
-    const b = Math.floor(Math.random() * 500);
-    return { a, b, answer: a + b };
+// MODIFIED: Generates a subtraction problem, ensuring the result is not negative.
+function generateProblem() {
+    let a = Math.floor(Math.random() * 500);
+    let b = Math.floor(Math.random() * 500);
+
+    // Ensure 'a' is always the larger number to avoid negative answers
+    if (a < b) {
+        [a, b] = [b, a]; // Simple swap using array destructuring
+    }
+
+    return { a, b, answer: a - b };
 }
 
 function uniqueId(prefix = '') {
     return `${prefix}${Date.now()}-${Math.random().toString(36).substr(2, 5)}`;
 }
 
-function PlusSums() {
-    const [sum, setSum] = useState(generateSum());
+function Subtraction() {
+    // RENAMED: 'sum' state is now 'problem' for clarity
+    const [problem, setProblem] = useState(generateProblem());
     const [input, setInput] = useState('');
     const [score, setScore] = useState(0);
     const [meteors, setMeteors] = useState([]);
-    const [timeLeft, setTimeLeft] = useState(180);
+    const [timeLeft, setTimeLeft] = useState(60);
     const [gameOver, setGameOver] = useState(false);
     const [scoreIndicators, setScoreIndicators] = useState([]);
     const [showFadeIn, setShowFadeIn] = useState(true);
     const [isLeaving, setIsLeaving] = useState(false);
     const [laser, setLaser] = useState(null);
 
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
-
     const rocketPosition = { x: 50, y: 95 }; // Rocket's laser origin in percentages
     const speed = 0.15;
     const navigate = useNavigate();
 
-    useEffect(() => {
-        async function fetchUser() {
-            const token = localStorage.getItem('token');
-            const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/me', {
-                headers: {
-                    Accept: 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
-            });
-
-            if (response.ok) {
-                const user = await response.json();
-                setUser(user);
-                console.log('ingelogd', user);
-                setLoading(false);
-            } else {
-                window.location.href = '/login';
-            }
-        }
-
-        fetchUser();
-    }, []);
     useEffect(() => {
         const timeout = setTimeout(() => setShowFadeIn(false), 1000);
         return () => clearTimeout(timeout);
@@ -66,7 +49,7 @@ function PlusSums() {
                 if (prev <= 1) {
                     clearInterval(interval);
                     setGameOver(true);
-                    addCoinsToServer(); // 👈 here
+                    addCoinsToServer();
                     return 0;
                 }
                 return prev - 1;
@@ -108,7 +91,6 @@ function PlusSums() {
                         const dy = rocketPosition.y - m.y;
                         const dist = Math.sqrt(dx * dx + dy * dy);
                         if (dist < 1) {
-                            // Meteor reached the rocket, end the game or handle collision
                             setGameOver(true);
                             return null;
                         }
@@ -126,11 +108,11 @@ function PlusSums() {
         e.preventDefault();
         if (gameOver || !input) return;
 
-        if (parseInt(input) === sum.answer) {
+        // MODIFIED: Check against the problem's answer
+        if (parseInt(input) === problem.answer) {
             const meteorToDestroy = meteors[0];
 
             if (meteorToDestroy) {
-                // 1. Fire the laser
                 setLaser({
                     id: uniqueId('laser-'),
                     fromX: rocketPosition.x,
@@ -139,7 +121,6 @@ function PlusSums() {
                     toY: meteorToDestroy.y,
                 });
 
-                // 2. Show +1 indicator at meteor's position
                 const scoreId = uniqueId('score-');
                 setScoreIndicators(indicators => [
                     ...indicators,
@@ -149,19 +130,17 @@ function PlusSums() {
                     setScoreIndicators(indicators => indicators.filter(i => i.id !== scoreId));
                 }, 1000);
 
-                // 3. After a short delay (laser travel time), destroy the meteor & update score
                 setTimeout(() => {
                     setMeteors(prev => prev.filter(m => m.id !== meteorToDestroy.id));
                     setScore(prev => prev + 1);
                 }, 100);
 
-                // 4. Remove the laser visual after its animation
                 setTimeout(() => setLaser(null), 300);
             } else {
-                // If no meteors, just give points
                 setScore(prev => prev + 1);
             }
-            setSum(generateSum());
+            // MODIFIED: Generate a new subtraction problem
+            setProblem(generateProblem());
         }
         setInput('');
     };
@@ -170,7 +149,7 @@ function PlusSums() {
         setIsLeaving(true);
         setGameOver(false);
         setTimeout(() => {
-            navigate("/", { state: { fromLevel: true } });
+            navigate("/level-selector");
         }, 2300);
     };
 
@@ -180,11 +159,11 @@ function PlusSums() {
             const response = await fetch('https://planeetwiskunde-backend.onrender.com/api/game/me/coins', {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/json',  // 👈 Add this
+                    'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ amount: score * 3 })
+                body: JSON.stringify({ amount: score })
             });
 
             if (response.ok) {
@@ -198,8 +177,6 @@ function PlusSums() {
         }
     }
 
-
-    if (loading) return null
     return (
         <main className="relative w-full h-screen bg-background text-white overflow-hidden">
             <SterrenBG />
@@ -208,13 +185,13 @@ function PlusSums() {
             <div className="absolute top-2 left-2 w-[150px] h-2 bg-gray-700 rounded overflow-hidden shadow-md z-40">
                 <div
                     className="h-full bg-green-500 transition-all duration-1000"
-                    style={{ width: `${(timeLeft / 180) * 100}%` }}
+                    style={{ width: `${(timeLeft / 60) * 100}%` }}
                 />
             </div>
 
-            {/* Question */}
+            {/* MODIFIED: Question display */}
             <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-5xl z-40">
-                Wat is {sum.a} + {sum.b}?
+                Wat is {problem.a} - {problem.b}?
             </div>
 
             {/* Score */}
@@ -292,9 +269,8 @@ function PlusSums() {
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 exit={{ opacity: 0 }}
-                                transition={{ duration: 0.1 }} // A quick flash
+                                transition={{ duration: 0.1 }}
                             />
-                            {/* Optional: A wider, semi-transparent line for a glow effect */}
                             <motion.line
                                 key={`${laser.id}-glow`}
                                 x1={`${laser.fromX}%`}
@@ -359,7 +335,7 @@ function PlusSums() {
                         onClick={handleBackToHome}
                         className="bg-white text-black px-6 py-2 rounded hover:bg-gray-300"
                     >
-                        Terug naar Home
+                        Terug naar Level Selectie
                     </button>
                 </div>
             )}
@@ -386,4 +362,4 @@ function PlusSums() {
     );
 }
 
-export default PlusSums;
+export default Subtraction;

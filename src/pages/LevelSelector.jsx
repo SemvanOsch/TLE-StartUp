@@ -15,6 +15,7 @@ import plusopiaR from "../img/plusopiaR.png";
 import plusopiaa from "/planeten/Plusopiaa.png";
 import xtropilosL from "../img/xtropilosL.png";
 import xtropilosR from "../img/xtropilosR.png";
+import {getUserCoins} from "../api.js";
 import xtropiloss from "/planeten/Xtropoliss.png";
 
 const levels = [
@@ -48,7 +49,7 @@ const levels = [
         leftArrow: halverraL,
         rightArrow: halverraR,
         planetImg: halverraa,
-        path: "/"
+        path: "/division"
     },
 ];
 
@@ -63,7 +64,25 @@ const LevelSelector = () => {
     const [initialZoomOut, setInitialZoomOut] = useState(false);
     const planetRef = useRef(null);
     const navigate = useNavigate();
+    const [coins, setCoins] = useState(0);
 
+    useEffect(() => {
+        const fetchCoins = async () => {
+            const userId = localStorage.getItem("userId");
+            if (userId) {
+                const result = await getUserCoins(userId);
+                console.log('Coin response:', result);
+
+                // Adjust this line based on your API response
+                const actualCoins = result.coins ?? result.user?.coins;
+
+                if (actualCoins !== undefined) {
+                    setCoins(actualCoins);
+                }
+            }
+        };
+        fetchCoins();
+    }, []);
     useEffect(() => {
         async function fetchUser() {
             const token = localStorage.getItem("token");
@@ -155,7 +174,10 @@ const LevelSelector = () => {
                     style={{ boxShadow: "0 0 12px white" }}
                 />
             )}
-
+            <div
+                className="absolute top-4 right-28 bg-yellow-300 text-black font-bold py-2 px-4 rounded-full shadow-lg text-lg z-20">
+                🪙 {coins}
+            </div>
             <h1 className="absolute top-8 left-0 right-0 text-center text-4xl font-bold z-10">
                 Kies een planeet
             </h1>
