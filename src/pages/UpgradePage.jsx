@@ -305,19 +305,21 @@ const UpgradePage = () => {
                 }`}
             />
             <div className="bg-cover bg-center min-h-screen min-w-full z-40" style={{backgroundImage: `url(${background})`}}>
-                <h1 className={'money'}>${money}</h1>
                 <img id={'upgradeButton'} src={currentButton} onClick={useMoney}/>
-                <button onClick={addMoney}>+money</button>
-                <button onClick={handleLoguout}>logout</button>
                 <div className="absolute top-4 left-4 z-30">
                     <button
                         onClick={() => navigate("/")}
-                        className="text-white text-2xl hover:scale-110 transition-transform"
+                        className="hover:scale-110 transition-transform"
                         title="Ga naar home"
                     >
-                        🏠
+                        <img
+                            src="/Home.png"
+                            alt="Home"
+                            className="w-8 h-8" // Pas deze waarden aan indien nodig
+                        />
                     </button>
                 </div>
+
             </div>
             <SterrenBG/>
         </div>
