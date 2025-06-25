@@ -294,7 +294,7 @@ function Division() {
                 <h2 className={`text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)] ${
                     isCorrect ? 'text-green-500' : isIncorrect ? 'text-red-500' : 'text-text'
                 }`}>
-                    {answer} / {number1} = ?
+                    {answer} : {number1} =
                 </h2>
             </section>
 

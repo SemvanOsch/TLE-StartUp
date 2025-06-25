@@ -289,7 +289,7 @@ function Multiplication() {
 
             <section className="fixed top-5 left-1/2 transform -translate-x-1/2 pt-10 text-center">
                 <h2 className={`text-8xl drop-shadow-[0px_0px_4px_rgba(0,0,0,1)] ${isCorrect ? 'text-green-500' : isIncorrect ? 'text-red-500' : 'text-text'}`}>
-                    {number1} x {number2} = ?
+                    {number1} x {number2} =
                 </h2>
             </section>
 
